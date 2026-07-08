@@ -1,0 +1,4 @@
+1) Add custom Advanced Dorks for other search engines. Such as DuckDuckGo, Yandex, Bing, etc.
+2) Add Facebook, Instagram, Telegram and other social media platforms dorks file. 
+3) Add more content on Dorks References. 
+4) Add a new page to showcase my top tools picks, blogs, etc. related to OSINT work. 
