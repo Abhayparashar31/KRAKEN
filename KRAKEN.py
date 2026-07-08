@@ -65,7 +65,7 @@ def logo_header(name: str, level: str = "##"):
         st.markdown(f"{hashes} {name}")
 
 
-st.set_page_config(page_title="KRAKEN: OSINT DORK GENERATOR", page_icon="🐙", layout="centered")
+st.set_page_config(page_title="KRAKEN: OSINT DORKS GENERATOR", page_icon="🐙", layout="centered")
 
 # Fix low-contrast tab scroll arrows when many tabs overflow the row
 st.markdown("""
