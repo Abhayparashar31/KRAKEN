@@ -54,6 +54,7 @@ def generate_dorks(value, ptype, date_from=None, date_to=None):
     term = value.replace("https://", "").replace("http://", "").strip("/") if ptype == "Website / Domain" else value
     quoted = f'"{term}"'
     is_site = ptype == "Website / Domain"
+    is_username = ptype == "Username / Handle"
 
     dr = ""
     if date_from:
@@ -72,7 +73,6 @@ def generate_dorks(value, ptype, date_from=None, date_to=None):
         ("intitle - word in title", _j(f"intitle:({quoted})", dr)),
         ("allintitle - all words in title", _j(f"allintitle: {term}", dr)),
         ("inanchor - inbound link anchor text", _j(f"inanchor:({quoted})", dr)),
-        ("allinpostauthor - blog posts by author", _j(f"allinpostauthor:{term}", dr)),
     ]
     if is_site:
         general += [
@@ -81,8 +81,7 @@ def generate_dorks(value, ptype, date_from=None, date_to=None):
             ("related - similar sites", f"related:{term}"),
             ("cache - Google's cached copy", f"cache:{term}"),
             ("site + login/admin", _j(f"site:{term}", "inurl:login OR inurl:admin OR inurl:signin")),
-            ("site + exposed config/backup", _j(f"site:{term}", "(inurl:config OR inurl:backup OR inurl:.env OR inurl:.git)")),
-            ("subdomains", f"site:*.{term} -site:www.{term}"),
+            ("site + exposed config/backup", _j(f"site:{term}", "(inurl:config OR inurl:backup OR inurl:.env OR inurl:.git)"))
         ]
     else:
         general += [
@@ -90,6 +89,58 @@ def generate_dorks(value, ptype, date_from=None, date_to=None):
             ("numrange - numeric range near term", _j(quoted, "1000..9999", dr)),
         ]
     sections["General-Dorks"] = general
+    #############################################################################
+    ######################### Advanced Google Dorks  ############################
+    #############################################################################
+    if is_site:
+        advanced = [
+        ("Subdomains", f"site:*.{term} -site:www.{term}"),
+        ("Exposed Development Servers", _j(f'site:{term}', 'intitle:\"index of\"', "dev", dr)),
+        ("Finding Admin Panels", _j(f"site:{term}", "(inurl:admin | inurl:login)", dr)),
+        ("Cloud Storage Discovery", _j("site:s3.amazonaws.com", f'"{term}"', dr)),
+        ("Alternative Domains", _j(f'"{term}"', "(site:*.ru | site:*.ir)", dr)),
+        ("Finding Resumes", _j(f"site:{term}", "filetype:pdf", '"resume"', dr)),
+        ("Spreadsheets with Emails", _j(f"site:{term}", "filetype:xlsx", '"email"', dr)),
+        ("Internal Presentations", _j(f"site:{term}", "filetype:pptx", '"confidential"', dr)),
+        ("Old Log Files", _j(f"site:{term}", "filetype:log", dr)),
+        ("Google's cached copy", f"cache:{term}"),
+        ("SQL Dumps", _j(f"site:{term}", "filetype:sql", dr)),
+        ("Finding Employee Handbook", _j(f"site:{term}", '"employee handbook"', "filetype:pdf", dr)),
+        ("Pastebin Monitoring", _j("site:pastebin.com", f'"{term}"', dr)),
+        ("API Docs", _j(f"site:*.{term}", "(inurl:swagger OR inurl:api-docs)", dr)),
+        ("Financial Statements", _j(f"site:{term}", '"budget"', "filetype:pdf", dr)),
+        ("NDA", _j(f"site:{term}", '"NDA"', "filetype:docx", dr)),
+        ("Similar sites", f"related:{term}"),
+        ("Government Mentions", _j("site:gov", f'"{term}"', dr)),
+        ("Wiki Pages", _j(f"site:{term}", "(inurl:wiki | inurl:confluence)", dr)),
+        ("API Endpoints", _j(f"site:{term}", '("api/v1" | "api/v2")', dr)),
+        ("Security Advisories", _j(f"site:{term}", '("security advisory" | "vulnerability report")', dr)),
+    ]
+        sections["Advanced-Dorks"] = advanced
+    
+    if is_username:
+        print("Selected Category is a Username")
+        advanced = [
+        ("Blog posts by author", _j(f"allinpostauthor:{term}", dr)),
+        ("Username Cross Search",_j(f"{term}”*com",dr)),
+        ("Developer Profiles", _j(f'site:://github.com{term} | site:://gitlab.com{term} | site:bitbucket.org/{term}', dr)),
+        ("Tech Forums & Q&A", _j(f'site:://stackoverflow.com | site:://reddit.com{term}', dr)),
+        ("Email Address Predictor", _j(f'"{term}@gmail.com" | "{term}@hotmail.com" | "{term}@outlook.com" | "{term}@yahoo.com"', dr)),
+        ("Corporate Email Pattern", _j(f'"{term}@" site:*.*', dr)),
+        ("Wildcard Username Domain Hunt", _j(f'"{term}"*com | "{term}"*net | "{term}"*org', dr)),
+        ("Forum Mentions & Signatures", _j(f'"{term}"', '(inurl:forum | inurl:thread | inurl:viewtopic)', dr)),
+        ("Disqus Commenting History", _j(f'site:://disqus.com{term}', dr)),
+        ("Medium Publishing Profile", _j(f'site:://medium.com@{term}', dr)),
+        ("Gaming Handles Lookup", _j(f'site:://steamcommunity.com{term} | site:twitch.tv/{term}', dr)),
+        ("Public Key & SSH Associations", _j(f'"{term}"', '(ext:pub | ext:key)', '"ssh-rsa"', dr)),
+        ("Hardcoded Username in Public Code", _j('site:github.com | site:://github.com', f'"user: {term}" | "username: {term}"', dr)),
+        ("Pastebin Nickname Tracking", _j('site:pastebin.com', f'"{term}"', dr)),
+        ("S3 Bucket Creator/Owner Clues", _j('site:://amazonaws.com', f'"{term}"', dr)),
+        ("Whois Record Visual Traces", _j(f'site:whois.com | site:viewdns.info', f'"{term}"', dr)),
+        ]
+        
+        sections["Advanced-Dorks"] = advanced
+
 
     first_word = term.split()[0] if term.split() else term
     sections["Operator-Dorks"] = [
