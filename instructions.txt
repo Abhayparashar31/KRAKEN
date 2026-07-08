@@ -119,8 +119,6 @@ HOW TO ADD A NEW SEARCH ENGINE
 ===========================================================
 HOW TO ADD A NEW SOCIAL PLATFORM
 ===========================================================
-(Unchanged from before - see platforms/x.py for a working example.)
-
 Required constants: DOMAIN, DISPLAY_NAME
 Required function:  generate_dorks(value, ptype, date_from, date_to)
                      -> list[tuple[label, raw_dork]]

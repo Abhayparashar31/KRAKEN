@@ -142,5 +142,18 @@ for row in rows:
                 show_card(card["name"])
             st.markdown("---")
 
-st.info("💡 This page is separate from the wizard - use the sidebar, or the link at the bottom of the "
-        "generator page, to jump back to **KRAKEN** at any time.")
+st.info("💡 This page is separate from the wizard - use the sidebar, or the link at the bottom of this "
+        " page, to jump back to **KRAKEN** at any time.")
+st.markdown("---")
+col1, col2 = st.columns(2)
+
+with col1:
+    st.page_link(
+        "KRAKEN.py",
+        label="🐙 KRAKEN: OSINT DORK GENERATOR",
+    )
+with col2:
+    st.page_link(
+        "https://start.me/p/xj5yzR/osint-tools",
+        label="⚙️ My Personal OSINT Tools Glossary",
+    )

@@ -44,6 +44,7 @@ LOGO_DOMAIN = {
     "Reddit": "reddit.com",
     "Facebook": "facebook.com",
     "Instagram": "instagram.com",
+    "LinkedIn": "linkedin.com"
 }
 
 
@@ -192,14 +193,12 @@ elif st.session_state.step == 5:
         available = {mod.DISPLAY_NAME: name for name, mod in PLATFORM_MODULES.items()}
         if not available:
             st.warning("No platform modules found in platforms/. Add one following instructions.txt.")
-        options = ["None"] + list(available.keys()) + ["All"]
+        options = list(available.keys()) + ["All"]
         choice = st.multiselect("Platform(s):", options,
                                  default=st.session_state.get("platform_choice_display", []))
         st.session_state.platform_choice_display = choice
-        if "None" in choice:
-            selected_platforms = []
-        else:
-            selected_platforms = list(PLATFORM_MODULES.keys()) if "All" in choice else [available[c] for c in choice]
+
+        selected_platforms = list(PLATFORM_MODULES.keys()) if "All" in choice else [available[c] for c in choice]
 
         if selected_platforms:
             kw_raw = st.text_input("Extra keywords to narrow platform dorks (comma-separated, optional):",
@@ -303,6 +302,15 @@ elif st.session_state.step == 6:
 
 # ================= PERSISTENT BOTTOM LINK (visible on every step) =================
 st.markdown("---")
-st.page_link("pages/Dork_Reference.py",
-             label="Manual Dork Reference — browse raw operators/keywords per source",
-             icon="🔗")
+col1, col2 = st.columns(2)
+with col1:
+    st.page_link(
+        "pages/Dork_Reference.py",
+        label="📚 Dork References: Manual Search References",
+    )
+
+with col2:
+    st.page_link(
+        "https://start.me/p/xj5yzR/osint-tools",
+        label="⚙️ My Personal OSINT Tools Glossary",
+    )

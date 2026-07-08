@@ -250,7 +250,12 @@
   .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
   .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
   .redacted-box strong{ color: var(--ink); }
-
+  .refs{ margin-top: 20px; display:flex; flex-direction:column; gap: 12px; }
+  .ref{ display:grid; grid-template-columns: 92px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); }
+  .ref .kind{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:0.08em; text-transform:uppercase; color: var(--paper); background: var(--teal); padding: 4px 8px; border-radius: 3px; text-align:center; height: fit-content; }
+  .ref a{ color: var(--ink); font-weight:600; text-decoration: none; border-bottom: 1.5px solid var(--manila-dark); }
+  .ref a:hover{ color: var(--teal); }
+  .ref p{ margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); }
   footer{
     margin-top: 70px;
     padding-top: 20px;
@@ -406,6 +411,16 @@
         <li><strong>Verify before you amplify.</strong> Geotagged or timestamped posts can be misleading, mislabeled, or old — corroborate with independent sources before treating them as confirmed.</li>
         <li><strong>Report, don't exploit.</strong> If a search surfaces someone else's exposed personal data or credentials, the responsible step is reporting it, not further digging.</li>
       </ul>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="section-eyebrow">05 / Sources & Further Intel</div>
+    <h2 class="section-title">Go straight to the documentation</h2>
+    <div class="refs">
+      <div class="ref"><span class="kind">X Official Docs</span><div><a href="https://docs.x.com/x-api/posts/search/integrate/operators" target="_blank" rel="noopener">r/help</a><p>Reddit's own community for platform questions, including search behavior quirks.</p></div></div>
+      <div class="ref"><span class="kind">Advanced Twitter Search Operators</span><div><a href="https://www.exportdata.io/blog/advanced-twitter-search-operators/" target="_blank" rel="noopener">Reddit Help — Search Tips</a><p>Reddit's own documentation on subreddit:, author:, flair:, and other search operators.</p></div></div>
+      <div class="ref"><span class="kind">X Advanced Operators</span><div><a href="https://fedica.com/blog/x-advanced-search/" target="_blank" rel="noopener">Reddit Search</a><p>The native search interface where these operators can be tested directly.</p></div></div>
     </div>
   </section>
 

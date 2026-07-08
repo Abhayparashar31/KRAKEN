@@ -250,7 +250,12 @@
   .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
   .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
   .redacted-box strong{ color: var(--ink); }
-
+  .refs{ margin-top: 20px; display:flex; flex-direction:column; gap: 12px; }
+  .ref{ display:grid; grid-template-columns: 92px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); }
+  .ref .kind{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:0.08em; text-transform:uppercase; color: var(--paper); background: var(--teal); padding: 4px 8px; border-radius: 3px; text-align:center; height: fit-content; }
+  .ref a{ color: var(--ink); font-weight:600; text-decoration: none; border-bottom: 1.5px solid var(--manila-dark); }
+  .ref a:hover{ color: var(--teal); }
+  .ref p{ margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); }
   footer{
     margin-top: 70px;
     padding-top: 20px;
