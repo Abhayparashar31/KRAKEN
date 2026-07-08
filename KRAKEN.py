@@ -131,7 +131,7 @@ if "step" not in st.session_state:
 def goto(step):
     st.session_state.step = step
 
-st.title("🐙 KRAKEN: OSINT DORK GENERATOR")
+st.title("🐙 KRAKEN: OSINT DORKS GENERATOR")
 st.caption("Guided wizard for building advanced search dorks. For authorized research and public OSINT use only.")
 st.progress({1: .16, 2: .33, 3: .5, 4: .66, 5: .83, 6: 1.0}.get(st.session_state.step, .1))
 if st.session_state.step == 1:
