@@ -1,73 +1,189 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <style>
-      body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; color: #222; background: #fafafa; line-height: 1.5; }
-      h2 { margin-top: 0; }
-      h3 { margin-top: 28px; border-bottom: 2px solid #008373; padding-bottom: 4px; }
-      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; font-size: 0.9rem; }
-      th { background: #008373; color: #fff; }
-      code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; }
-      .example { background: #fff; border-left: 4px solid #008373; padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
-      .tag { display: inline-block; background: #e0f2ef; color: #00594f; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-right: 6px; }
-      .usecase { background: #eef7ee; border-left: 4px solid #2e7d32; padding: 8px 12px; margin: 6px 0; font-size: 0.88rem; border-radius: 4px; }
-      .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 8px 12px; margin: 12px 0; font-size: 0.88rem; border-radius: 4px; }
-    </style>
-  </head>
-  <body>
-    <h2>🔷 Bing</h2>
-    <p>Bing supports a solid Google-like operator subset, plus one genuinely unique operator
-    worth knowing: <code>contains:</code>.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Manual: Bing Search Operators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<!--<link rel="stylesheet" href="../styles/design.css"> -->
+<style>
+  :root{
+    --paper: #ece5d4; --card: #f6f1e4; --ink: #211d17; --ink-soft: #4a4438;
+    --manila: #c9a86a; --manila-dark: #a9853f; --stamp-red: #9c3b2e; --teal: #2f5a54;
+    --rule: rgba(33,29,23,0.22); --shadow: rgba(33,29,23,0.18);
+  }
+  *{ box-sizing: border-box; }
+  body{ margin:0; background: radial-gradient(ellipse at top left, rgba(255,255,255,0.25), transparent 60%), var(--paper); color: var(--ink); font-family: 'Source Serif 4', serif; line-height:1.6; }
+  ::selection{ background: var(--manila); color: var(--ink); }
+  .grain{ position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
 
-    <div class="note">
-      <b>Not supported on Bing:</b> <code>allintext:</code>, <code>allinurl:</code>,
-      <code>allintitle:</code>, <code>inanchor:</code>, <code>related:</code>, <code>cache:</code>,
-      and there's no public date-range text operator.
+  header.cover{ position:relative; margin: 0 auto; padding: 56px 40px 44px; max-width: 900px; border: 2px solid var(--ink); background: var(--card); box-shadow: 0 18px 40px -20px var(--shadow); }
+  .tab{ position:absolute; top:-22px; left:40px; background: var(--manila); border: 2px solid var(--ink); border-bottom: none; padding: 6px 18px 20px; font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 4px 4px 0 0; }
+  .case-no{ font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft); display:flex; justify-content: space-between; margin-bottom: 28px; border-bottom: 1px dashed var(--rule); padding-bottom: 14px; }
+  h1.title{ font-family:'Special Elite', monospace; font-size: clamp(30px, 5vw, 48px); margin: 0 0 6px; line-height:1.1; }
+  .subtitle{ font-family:'IBM Plex Mono', monospace; color: var(--ink-soft); font-size: 14px; margin: 0 0 26px; }
+  .stamp{ position:absolute; right: 36px; bottom: 30px; border: 3px solid var(--stamp-red); color: var(--stamp-red); font-family: 'Special Elite', monospace; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 14px; transform: rotate(-8deg); border-radius: 6px; opacity: 0.85; background: rgba(156,59,46,0.04); }
+  .cover-lede{ max-width: 64ch; font-size: 17px; }
+  .cover-lede strong{ background: linear-gradient(transparent 60%, var(--manila) 60%); }
+
+  .section{ margin-top: 64px; }
+  .section-eyebrow{ font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--manila-dark); display:flex; align-items:center; gap: 12px; margin-bottom: 10px; }
+  .section-eyebrow::after{ content:''; flex:1; height:1px; background: var(--rule); }
+  h2.section-title{ font-family:'Special Elite', monospace; font-size: 26px; margin: 0 0 18px; }
+  p.lead{ color: var(--ink-soft); font-size: 16px; max-width: 68ch; }
+
+  .op-table{ width:100%; border-collapse: collapse; margin-top: 20px; background: var(--card); border: 2px solid var(--ink); }
+  .op-table th{ font-family:'IBM Plex Mono', monospace; font-size: 11px; text-transform:uppercase; letter-spacing: 0.08em; background: var(--ink); color: var(--paper); padding: 10px 14px; text-align:left; }
+  .op-table td{ padding: 12px 14px; border-bottom: 1px solid var(--rule); font-size: 14.5px; vertical-align: top; }
+  .op-table tr:last-child td{ border-bottom:none; }
+  .op-table tr:nth-child(even) td{ background: rgba(201,168,106,0.10); }
+  code.tag{ font-family:'IBM Plex Mono', monospace; background: var(--ink); color: var(--paper); padding: 2px 7px; border-radius: 4px; font-size: 13px; white-space: nowrap; }
+
+  .card-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 18px; margin-top: 22px; }
+  .dork-card{ background: var(--card); border: 1.5px solid var(--ink); border-radius: 2px; padding: 18px 18px 16px; box-shadow: 4px 4px 0 var(--rule); transition: transform .15s ease, box-shadow .15s ease; }
+  .dork-card:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--manila-dark); }
+  .query{ display:block; font-family:'IBM Plex Mono', monospace; font-size: 12.8px; background: var(--ink); color: #dcd3bb; padding: 10px 12px; border-radius: 3px; overflow-x: auto; margin-bottom: 10px; white-space: pre; }
+  .dork-card p{ font-size: 13.5px; color: var(--ink-soft); margin: 0; }
+
+  .tips{ margin-top: 20px; display:flex; flex-direction:column; gap: 14px; }
+  .tip{ display:grid; grid-template-columns: 46px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border-left: 4px solid var(--manila-dark); }
+  .tip .num{ font-family:'Special Elite', monospace; font-size: 22px; color: var(--manila-dark); text-align:center; }
+  .tip h4{ margin: 0 0 4px; font-size: 15.5px; }
+  .tip p{ margin:0; color: var(--ink-soft); font-size: 14px; }
+
+  .redacted-box{ margin-top: 26px; border: 2px dashed var(--stamp-red); padding: 22px 24px; background: rgba(156,59,46,0.05); }
+  .redacted-box .flag{ font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--stamp-red); font-weight:700; margin-bottom: 10px; display:block; }
+  .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
+  .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
+  .redacted-box strong{ color: var(--ink); }
+
+  .refs{ margin-top: 20px; display:flex; flex-direction:column; gap: 12px; }
+  .ref{ display:grid; grid-template-columns: 92px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); }
+  .ref .kind{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:0.08em; text-transform:uppercase; color: var(--paper); background: var(--teal); padding: 4px 8px; border-radius: 3px; text-align:center; height: fit-content; }
+  .ref a{ color: var(--ink); font-weight:600; text-decoration: none; border-bottom: 1.5px solid var(--manila-dark); }
+  .ref a:hover{ color: var(--teal); }
+  .ref p{ margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+
+  footer{ margin-top: 70px; padding-top: 20px; border-top: 1px solid var(--rule); font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap: 10px; }
+
+  @media (max-width: 600px){
+    header.cover{ padding: 48px 20px 32px; }
+    .stamp{ position:static; display:inline-block; margin-top: 18px; transform: rotate(-4deg); }
+    .case-no{ flex-direction:column; gap:4px; }
+    .ref{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="tab">Research Notes</div>
+    <div class="case-no">
+      <span>CLASSIFICATION: PUBLIC / EDUCATIONAL</span>
     </div>
+    <h1 class="title">Bing</h1>
+    <p class="subtitle">A field guide to advanced search-operator reconnaissance on Bing</p>
+    <p class="cover-lede">Bing has the richest operator set among the "Google-style" engines, including several — like infrastructure-mapping and anchor-text search — that Google has since dropped or heavily restricted.</p>
+    <div class="stamp">Authorized use only</div>
+  </header>
 
-    <h3>Filters</h3>
-    <table>
-      <tr><th>Filter</th><th>What it does</th></tr>
-      <tr><td><code>intitle:</code></td><td>Finds pages with the keyword in the page title</td></tr>
-      <tr><td><code>inurl:</code></td><td>Searches for URLs containing the specified keyword</td></tr>
-      <tr><td><code>site:</code></td><td>Restricts results to a specific website or domain</td></tr>
-      <tr><td><code>filetype:</code></td><td>Limits results to a specific file type</td></tr>
-      <tr><td><code>link:</code></td><td>Finds pages that link to a specific URL</td></tr>
-      <tr><td><code>contains:</code></td><td>Finds pages that LINK TO a file of the given type (e.g. <code>contains:pdf</code>) - different from <code>filetype:</code>, which finds pages that ARE that file type</td></tr>
+  <section class="section">
+    <div class="section-eyebrow">01 / Core Operators</div>
+    <h2 class="section-title">The syntax you'll actually use</h2>
+    <p class="lead">Combine several in one query for precision — that's where Bing's extra operators really pay off.</p>
+    <table class="op-table">
+      <tr><th>Operator</th><th>What it does</th><th>Example</th></tr>
+      <tr><td><code class="tag">site:</code></td><td>Restricts results to a domain</td><td><code class="tag">site:microsoft.com</code></td></tr>
+      <tr><td><code class="tag">filetype:</code></td><td>Limits results to a file extension</td><td><code class="tag">filetype:xlsx</code></td></tr>
+      <tr><td><code class="tag">intitle:</code></td><td>Word must be in the page title</td><td><code class="tag">intitle:advisory</code></td></tr>
+      <tr><td><code class="tag">inbody:</code></td><td>Word must appear in the page body specifically</td><td><code class="tag">inbody:"internal only"</code></td></tr>
+      <tr><td><code class="tag">inanchor:</code></td><td>Word appears in inbound link anchor text</td><td><code class="tag">inanchor:"download now"</code></td></tr>
+      <tr><td><code class="tag">ip:</code></td><td>Finds other sites hosted on the same IP address</td><td><code class="tag">ip:192.0.2.10</code></td></tr>
+      <tr><td><code class="tag">feed:</code></td><td>Finds RSS/Atom feeds matching a term</td><td><code class="tag">feed:security advisory</code></td></tr>
+      <tr><td><code class="tag">contains:</code></td><td>Pages that link to a file of a given type</td><td><code class="tag">contains:pdf "quarterly report"</code></td></tr>
+      <tr><td><code class="tag">loc: / location:</code></td><td>Restricts results to a country</td><td><code class="tag">loc:UK "budget announcement"</code></td></tr>
     </table>
+  </section>
 
-    <h3>Operators</h3>
-    <table>
-      <tr><th>Operator</th><th>What it does</th></tr>
-      <tr><td><code>"phrase"</code></td><td>Exact phrase match</td></tr>
-      <tr><td><code>OR</code></td><td>Matches either term</td></tr>
-      <tr><td><code>-</code></td><td>Excludes a term</td></tr>
-      <tr><td><code>()</code></td><td>Groups operators for combined logic</td></tr>
-    </table>
-
-    <h3>Sample Dorks</h3>
-    <div class="example">
-      <span class="tag">Pages linking to PDFs</span><br>
-      <code>site:example.com contains:pdf</code>
-      <p>Finds pages on a domain that link out to PDF files - useful for locating document indexes/repositories.</p>
+  <section class="section">
+    <div class="section-eyebrow">02 / Illustrative Patterns</div>
+    <h2 class="section-title">Common reconnaissance categories</h2>
+    <p class="lead">Categories most public OSINT and infrastructure-mapping guides reference — shown at the pattern level so you understand the intent behind each.</p>
+    <div class="card-grid">
+      <div class="dork-card">
+        <span class="query">ip:203.0.113.5</span>
+        <p>Reveals other domains co-hosted on the same server — a useful pivot when mapping your own organization's infrastructure footprint from public data.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">contains:pdf site:.gov "budget 2024"</span>
+        <p>Surfaces government pages that link out to PDF budget documents, even if the PDF itself isn't directly indexed.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">inanchor:"login" site:target.com</span>
+        <p>Finds pages that other sites link to using "login" as anchor text — a different discovery angle than a plain URL search.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">inbody:"internal use only" filetype:pdf</span>
+        <p>Restricts the sensitivity-marker search specifically to body text, filtering out pages that only mention the phrase in a title or caption.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">feed:"security advisory" site:target.com</span>
+        <p>Locates an organization's RSS/Atom feed for security advisories, useful for setting up automated monitoring.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">loc:DE site:target.com "datenschutz"</span>
+        <p>Combines a country restriction with a language-specific term to find region-specific compliance pages.</p>
+      </div>
     </div>
-    <div class="example">
-      <span class="tag">Exposed backups</span><br>
-      <code>site:example.com inurl:backup OR inurl:.env</code>
-      <p>Finds indexed backup/config files on a target domain.</p>
-    </div>
-    <div class="example">
-      <span class="tag">Name + document type</span><br>
-      <code>intitle:"John Doe" filetype:docx</code>
-      <p>Finds Word documents with a name in the title.</p>
-    </div>
+  </section>
 
-    <h3>When to use Bing dorking</h3>
-    <div class="usecase"><b>Cross-verification</b> — Bing indexes some pages Google misses or de-prioritizes, useful as a second opinion during recon.</div>
-    <div class="usecase"><b>Finding document repositories</b> — <code>contains:</code> is genuinely useful for locating pages that aggregate links to a filetype, which Google has no direct equivalent for.</div>
-    <div class="usecase"><b>Corporate/government sites</b> — Bing has historically indexed more of the .gov/.mil and enterprise SharePoint space well.</div>
+  <section class="section">
+    <div class="section-eyebrow">03 / Pro Tips</div>
+    <h2 class="section-title">Getting good results</h2>
+    <div class="tips">
+      <div class="tip"><div class="num">01</div><div><h4>Use <code class="tag">ip:</code> only on your own infrastructure</h4><p>It's the single most powerful operator in this list for infrastructure mapping — reserve it for auditing systems you're authorized to review.</p></div></div>
+      <div class="tip"><div class="num">02</div><div><h4>Combine <code class="tag">inbody:</code> and <code class="tag">intitle:</code> for precision</h4><p>Splitting title vs. body matching filters out false positives where a keyword only appears incidentally in a heading.</p></div></div>
+      <div class="tip"><div class="num">03</div><div><h4>Use <code class="tag">contains:</code> to find link pages, not just files</h4><p>It surfaces pages that reference a file type without the file itself being indexed — useful when the original document has been taken down.</p></div></div>
+      <div class="tip"><div class="num">04</div><div><h4>Set the region with <code class="tag">loc:</code> before assuming absence</h4><p>Bing's default region can hide relevant results — explicitly setting a country often surfaces more.</p></div></div>
+      <div class="tip"><div class="num">05</div><div><h4>Use Bing Webmaster Tools for backlink data instead of <code class="tag">link:</code></h4><p>Bing's own webmaster dashboard gives far more reliable backlink data than the legacy search operator.</p></div></div>
+      <div class="tip"><div class="num">06</div><div><h4>Run dorks against your own org first</h4><p>The highest-value use of Bing's extra operators is auditing your own domain's exposure and infrastructure footprint.</p></div></div>
+    </div>
+  </section>
 
-    <p style="margin-top:24px;color:#888;">— Add more examples here as you build out this reference file.</p>
-  </body>
+  <section class="section">
+    <div class="section-eyebrow">04 / Scope & Ethics</div>
+    <h2 class="section-title">Where the line is</h2>
+    <div class="redacted-box">
+      <span class="flag">Read before you search</span>
+      <ul>
+        <li><strong>Authorization matters, especially for <code class="tag">ip:</code>.</strong> Infrastructure-mapping operators are appropriate for auditing your own organization, not for reconnaissance against a third party without permission.</li>
+        <li><strong>Finding ≠ accessing.</strong> Discovering an exposed file or login page is different from downloading or logging into anything you find.</li>
+        <li><strong>Report, don't exploit.</strong> If you stumble on someone else's real exposed data, the responsible move is good-faith disclosure, not further probing.</li>
+        <li><strong>Respect site terms.</strong> Some sites explicitly disallow automated scraping of indexed content even when technically reachable.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">05 / Sources & Further Intel</div>
+    <h2 class="section-title">Go straight to the documentation</h2>
+    <div class="refs">
+      <div class="ref"><span class="kind">Official</span><div><a href="https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/reference/query-parameters" target="_blank" rel="noopener">Microsoft Bing — Advanced Search Keywords</a><p>Bing's advanced operator reference, including ip:, contains:, and inanchor:.</p></div></div>
+      <div class="ref"><span class="kind">Tool</span><div><a href="https://www.bing.com/webmasters/" target="_blank" rel="noopener">Bing Webmaster Tools</a><p>Official dashboard for backlink data, indexing status, and site health, replacing the legacy link: operator.</p></div></div>
+      <div class="ref"><span class="kind">Reference</span><div><a href="https://support.microsoft.com/en-us/topic/advanced-search-keywords-3f9d0abc-1e15-4967-b6b9-cfd5b4a9a58e" target="_blank" rel="noopener">Bing Advanced Search Keywords — Support</a><p>Consumer-facing support article covering the same operator set in plain language.</p></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Field Manual — Bing Search Operators</span>
+    <span>For educational & authorized research use</span>
+  </footer>
+
+</div>
+</body>
 </html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Manual: Instagram Search Operators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ece5d4;
+    --paper-dark: #e1d7bd;
+    --card: #f6f1e4;
+    --ink: #211d17;
+    --ink-soft: #4a4438;
+    --manila: #c9a86a;
+    --manila-dark: #a9853f;
+    --stamp-red: #9c3b2e;
+    --teal: #2f5a54;
+    --rule: rgba(33,29,23,0.22);
+    --shadow: rgba(33,29,23,0.18);
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top left, rgba(255,255,255,0.25), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    line-height:1.6;
+  }
+
+  ::selection{ background: var(--manila); color: var(--ink); }
+
+  .grain{
+    position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ===== HEADER / DOSSIER COVER ===== */
+  header.cover{
+    position:relative;
+    margin: 0 auto;
+    padding: 56px 40px 44px;
+    max-width: 900px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 0 18px 40px -20px var(--shadow);
+  }
+  .tab{
+    position:absolute; top:-22px; left:40px;
+    background: var(--manila);
+    border: 2px solid var(--ink);
+    border-bottom: none;
+    padding: 6px 18px 20px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 4px 4px 0 0;
+  }
+  .case-no{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    display:flex; justify-content: space-between;
+    margin-bottom: 28px;
+    border-bottom: 1px dashed var(--rule);
+    padding-bottom: 14px;
+  }
+  h1.title{
+    font-family:'Special Elite', monospace;
+    font-size: clamp(32px, 5vw, 52px);
+    margin: 0 0 6px;
+    letter-spacing: 0.01em;
+    line-height:1.1;
+  }
+  .subtitle{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--ink-soft);
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    margin: 0 0 26px;
+  }
+  .stamp{
+    position:absolute;
+    right: 36px;
+    bottom: 30px;
+    border: 3px solid var(--stamp-red);
+    color: var(--stamp-red);
+    font-family: 'Special Elite', monospace;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    transform: rotate(-8deg);
+    border-radius: 6px;
+    opacity: 0.85;
+    background: rgba(156,59,46,0.04);
+  }
+  .cover-lede{ max-width: 60ch; font-size: 17px; color: var(--ink); }
+  .cover-lede strong{ background: linear-gradient(transparent 60%, var(--manila) 60%); }
+
+  /* ===== SECTION LABELS ===== */
+  .section{ margin-top: 64px; }
+  .section-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--manila-dark);
+    display:flex; align-items:center; gap: 12px;
+    margin-bottom: 10px;
+  }
+  .section-eyebrow::after{
+    content:''; flex:1; height:1px; background: var(--rule);
+  }
+  h2.section-title{
+    font-family:'Special Elite', monospace;
+    font-size: 26px;
+    margin: 0 0 18px;
+  }
+  p.lead{ color: var(--ink-soft); font-size: 16px; max-width: 68ch; }
+
+  /* ===== OPERATOR TABLE ===== */
+  .op-table{
+    width:100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+  }
+  .op-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform:uppercase;
+    letter-spacing: 0.08em;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 14px;
+    text-align:left;
+  }
+  .op-table td{
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14.5px;
+    vertical-align: top;
+  }
+  .op-table tr:last-child td{ border-bottom:none; }
+  .op-table tr:nth-child(even) td{ background: rgba(201,168,106,0.10); }
+  code.tag{
+    font-family:'IBM Plex Mono', monospace;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* ===== INDEX CARDS (DORK EXAMPLES) ===== */
+  .card-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap: 18px;
+    margin-top: 22px;
+  }
+  .dork-card{
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    padding: 18px 18px 16px;
+    position: relative;
+    box-shadow: 4px 4px 0 var(--rule);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .dork-card:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--manila-dark); }
+  .dork-card .cat{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+    display:block;
+  }
+  .dork-card h3{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size: 16.5px;
+    margin: 0 0 10px;
+  }
+  .query{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.8px;
+    background: var(--ink);
+    color: #dcd3bb;
+    padding: 10px 12px;
+    border-radius: 3px;
+    overflow-x: auto;
+    margin-bottom: 10px;
+    white-space: pre;
+  }
+  .dork-card p{ font-size: 13.5px; color: var(--ink-soft); margin: 0; }
+
+  /* ===== TIPS LIST ===== */
+  .tips{ margin-top: 20px; display:flex; flex-direction:column; gap: 14px; }
+  .tip{
+    display:grid;
+    grid-template-columns: 46px 1fr;
+    gap: 16px;
+    align-items:start;
+    padding: 14px 16px;
+    background: var(--card);
+    border-left: 4px solid var(--manila-dark);
+  }
+  .tip .num{
+    font-family:'Special Elite', monospace;
+    font-size: 22px;
+    color: var(--manila-dark);
+    text-align:center;
+  }
+  .tip h4{ margin: 0 0 4px; font-size: 15.5px; }
+  .tip p{ margin:0; color: var(--ink-soft); font-size: 14px; }
+
+  /* ===== ETHICS / REDACTED BOX ===== */
+  .redacted-box{
+    margin-top: 26px;
+    border: 2px dashed var(--stamp-red);
+    padding: 22px 24px;
+    background: rgba(156,59,46,0.05);
+    position: relative;
+  }
+  .redacted-box .flag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color: var(--stamp-red);
+    font-weight:700;
+    margin-bottom: 10px;
+    display:block;
+  }
+  .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
+  .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
+  .redacted-box strong{ color: var(--ink); }
+
+  footer{
+    margin-top: 70px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 600px){
+    header.cover{ padding: 48px 20px 32px; }
+    .stamp{ position:static; display:inline-block; margin-top: 18px; transform: rotate(-4deg); }
+    .case-no{ flex-direction:column; gap:4px; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="tab">Research Notes</div>
+    <div class="case-no">
+      
+      <span>CLASSIFICATION: PUBLIC / EDUCATIONAL</span>
+    </div>
+    <h1 class="title">Instagram</h1>
+    <p class="subtitle">A field guide to advanced search-operator reconnaissance on Instagram</p>
+    <p class="cover-lede">Instagram has no <code class="tag">site:</code>-style advanced search syntax of its own — its native search bar only does simple keyword/hashtag/account matching. Real precision instead comes from three other angles: Instagram's own <strong>tag and location pages</strong>, <strong>Google's index</strong> of public profiles, and the officially documented <strong>Graph API</strong> for developers with the right access.</p>
+    <div class="stamp">Authorized use only</div>
+  </header>
+
+  <section class="section">
+    <div class="section-eyebrow">01 / Core Operators & Syntax</div>
+    <h2 class="section-title">The three ways to query Instagram</h2>
+    <p class="lead">Native search is intentionally limited on purpose (privacy by design), so most real precision comes from combining it with Google indexing and Meta's own Graph API.</p>
+    <table class="op-table">
+      <tr><th>System</th><th>Operator / Pattern</th><th>What it does</th><th>Example</th></tr>
+      <tr><td rowspan="3" style="font-family:'IBM Plex Mono',monospace;font-size:12px;">Native app search</td>
+          <td><code class="tag">#hashtag</code></td><td>Jumps to a hashtag's dedicated feed page</td><td><code class="tag">#sunsetphotography</code></td></tr>
+      <tr><td><code class="tag">@username</code></td><td>Direct account lookup</td><td><code class="tag">@natgeo</code></td></tr>
+      <tr><td>Location pages</td><td>Browsing posts geotagged to a specific place</td><td>Search a place name directly in-app</td></tr>
+      <tr><td rowspan="4" style="font-family:'IBM Plex Mono',monospace;font-size:12px;">Google indexing</td>
+          <td><code class="tag">site:instagram.com</code></td><td>Restricts results to Instagram's indexed public pages</td><td><code class="tag">site:instagram.com/p "product launch"</code></td></tr>
+      <tr><td><code class="tag">inurl:</code></td><td>Matches a term in the profile or post URL path</td><td><code class="tag">site:instagram.com inurl:reel</code></td></tr>
+      <tr><td><code class="tag">intitle:</code></td><td>Matches a term in the indexed page title (often bio text)</td><td><code class="tag">site:instagram.com intitle:"photographer"</code></td></tr>
+      <tr><td><code class="tag">filetype:</code></td><td>Rarely useful directly, but works for linked documents referenced in bios</td><td><code class="tag">site:instagram.com filetype:pdf</code></td></tr>
+      <tr><td rowspan="3" style="font-family:'IBM Plex Mono',monospace;font-size:12px;">Graph API<br>(developer access)</td>
+          <td><code class="tag">fields=</code></td><td>Selects which fields to return for a connected account</td><td><code class="tag">?fields=id,username,media_count</code></td></tr>
+      <tr><td><code class="tag">/media</code> edge</td><td>Retrieves a connected account's own media objects</td><td><code class="tag">/{ig-user-id}/media?fields=caption,timestamp</code></td></tr>
+      <tr><td><code class="tag">hashtag search</code> endpoint</td><td>Looks up a hashtag ID, then its recent/top media (requires app review)</td><td><code class="tag">/ig_hashtag_search?q=sunsetphotography</code></td></tr>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">02 / Sample Queries</div>
+    <h2 class="section-title">Worked examples across all three systems</h2>
+    <p class="lead">Categories most OSINT and social-media-research guides reference — shown at the pattern level, not as a script for scraping private accounts.</p>
+    <div class="card-grid">
+      <div class="dork-card">
+        <span class="cat">Google index · profile discovery</span>
+        <h3>Finding a public profile by role</h3>
+        <span class="query">site:instagram.com intitle:"photographer" "based in Berlin"</span>
+        <p>Finds public bios matching a role and location without needing to know the exact handle in advance.</p>
+      </div>
+      <div class="dork-card">
+        <span class="cat">Google index · brand monitoring</span>
+        <h3>Finding public posts mentioning a brand</h3>
+        <span class="query">site:instagram.com/p "yourbrand" "unboxing"</span>
+        <p>Surfaces public post pages mentioning a brand alongside a specific context word, useful for lightweight social listening.</p>
+      </div>
+      <div class="dork-card">
+        <span class="cat">In-app · hashtag reconnaissance</span>
+        <h3>Mapping a topic's community</h3>
+        <span class="query">#eventname2026</span>
+        <p>Instagram's hashtag pages aggregate top and recent public posts — a fast way to see the full public conversation around an event.</p>
+      </div>
+      <div class="dork-card">
+        <span class="cat">In-app · geotagged content</span>
+        <h3>Reviewing posts from a specific venue</h3>
+        <span class="query">Location search: "Conference Center Name"</span>
+        <p>Instagram's location pages show public posts geotagged to that place — useful for event coverage or verification work.</p>
+      </div>
+      <div class="dork-card">
+        <span class="cat">Graph API · owned account audit</span>
+        <h3>Reviewing your own account's public media</h3>
+        <span class="query">GET /{ig-user-id}/media?fields=caption,media_type,timestamp,like_count</span>
+        <p>Pulls a connected Business or Creator account's own post history with engagement data in one call.</p>
+      </div>
+      <div class="dork-card">
+        <span class="cat">Graph API · hashtag lookup</span>
+        <h3>Programmatic hashtag research</h3>
+        <span class="query">GET /ig_hashtag_search?user_id={id}&q=eventname2026<br>GET /{hashtag-id}/top_media?user_id={id}&fields=caption,permalink</span>
+        <p>Requires an approved app with the Instagram Hashtag Search permission — returns a hashtag's ID, then its top public media.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">03 / Pro Tips</div>
+    <h2 class="section-title">Getting good results</h2>
+    <div class="tips">
+      <div class="tip"><div class="num">01</div><div><h4>Google indexes far less of Instagram than you'd expect</h4><p>Many profiles and posts are excluded from Google's index by design — treat <code class="tag">site:instagram.com</code> as a supplement, not a replacement, for in-app search.</p></div></div>
+      <div class="tip"><div class="num">02</div><div><h4>Hashtag pages cap at a limited window</h4><p>The "Recent" tab only shows a rolling window of posts — for historical hashtag research, third-party archiving or the Graph API's hashtag endpoints are more reliable.</p></div></div>
+      <div class="tip"><div class="num">03</div><div><h4>Location pages are a distinct discovery axis from hashtags</h4><p>A post can be geotagged without using any hashtag at all — check both when trying to find all public content from an event or venue.</p></div></div>
+      <div class="tip"><div class="num">04</div><div><h4>The Graph API only sees what your app is authorized to see</h4><p>You can pull rich data for accounts you manage, but reading another public figure's account requires their consent via Instagram's own permission flow — there's no general public-search endpoint.</p></div></div>
+      <div class="tip"><div class="num">05</div><div><h4>Business/Creator accounts expose more than Personal accounts</h4><p>Only Business and Creator accounts connected to a Facebook Page are queryable via the Graph API at all — Personal accounts aren't reachable this way.</p></div></div>
+      <div class="tip"><div class="num">06</div><div><h4>Archive anything time-sensitive</h4><p>Posts, stories, and even hashtag associations can be deleted or altered — screenshot or archive what you need before revisiting a query later.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">04 / Guidance & Access</div>
+    <h2 class="section-title">Where the line is</h2>
+    <div class="redacted-box">
+      <span class="flag">Read before you query</span>
+      <ul>
+        <li><strong>Private accounts stay private.</strong> None of these methods bypass a private account's follower-only visibility — that's enforced server-side, not just a UI setting.</li>
+        <li><strong>Graph API access is scoped and reviewed.</strong> Reading data beyond your own connected account requires the account owner's authorization through Meta's app review process — there's no way around this for legitimate use.</li>
+        <li><strong>Automated scraping violates Instagram's Terms.</strong> Bulk-scraping public profile or post data outside the official API is against Instagram's Terms of Use, independent of whether the content itself is public.</li>
+        <li><strong>Public ≠ fair game for every use.</strong> A public post being discoverable doesn't license using it to dox, harass, or build a profile on a private individual.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">05 / Sources & Further Intel</div>
+    <h2 class="section-title">Go straight to the documentation</h2>
+    <div class="refs">
+      <div class="ref"><span class="kind">Official Docs</span><div><a href="https://developers.facebook.com/docs/instagram-api/" target="_blank" rel="noopener">Instagram Platform API — Meta for Developers</a><p>The main reference for the Instagram Graph API, covering media, hashtag search, and account insights.</p></div></div>
+      <div class="ref"><span class="kind">Official Docs</span><div><a href="https://developers.facebook.com/docs/instagram-api/guides/hashtag-search" target="_blank" rel="noopener">Instagram Graph API — Hashtag Search Guide</a><p>Documents the ig_hashtag_search endpoint, required permissions, and rate limits.</p></div></div>
+      <div class="ref"><span class="kind">Official Docs</span><div><a href="https://help.instagram.com/" target="_blank" rel="noopener">Instagram Help Center</a><p>Covers native search behavior, hashtag and location page mechanics, and privacy settings.</p></div></div>
+      <div class="ref"><span class="kind">Tool</span><div><a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener">Graph API Explorer</a><p>Meta's official sandbox for testing Instagram Graph API queries before writing code.</p></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Field Manual — Instagram Search Operators</span>
+    <span>For educational & authorized research use</span>
+  </footer>
+
+</div>
+</body>
+</html>

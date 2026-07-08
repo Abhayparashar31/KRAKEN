@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Field Manual: DuckDuckGo Search Operators</title>
+<title>Field Manual: Yandex Search Operators</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
@@ -85,57 +85,58 @@
     <div class="case-no">
       <span>CLASSIFICATION: PUBLIC / EDUCATIONAL</span>
     </div>
-    <h1 class="title">DuckDuckGo</h1>
-    <p class="subtitle">A field guide to advanced search-operator reconnaissance on DuckDuckGo</p>
-    <p class="cover-lede">DuckDuckGo supports most Google-style operators, plus its own shorthand <strong>"bangs"</strong> that redirect a query straight to another site's own search engine — a feature no other engine in this series has.</p>
+    <h1 class="title">Yandex</h1>
+    <p class="subtitle">A field guide to advanced search-operator reconnaissance on Yandex</p>
+    <p class="cover-lede">Yandex's syntax diverges the most from the Google model — it uses <strong>proximity operators</strong> instead of simple AND logic, and its crawler indexes Russian-language and CIS-region content more thoroughly than Western engines typically do.</p>
     <div class="stamp">Authorized use only</div>
   </header>
 
   <section class="section">
     <div class="section-eyebrow">01 / Core Operators</div>
     <h2 class="section-title">The syntax you'll actually use</h2>
-    <p class="lead">Combine operators for precision, the same way you would on Google.</p>
+    <p class="lead">Several operators here have no direct Google equivalent — worth learning on their own terms rather than mapping one-to-one.</p>
     <table class="op-table">
       <tr><th>Operator</th><th>What it does</th><th>Example</th></tr>
-      <tr><td><code class="tag">site:</code></td><td>Restricts results to a domain</td><td><code class="tag">site:wikipedia.org</code></td></tr>
-      <tr><td><code class="tag">filetype:</code></td><td>Limits results to a file extension</td><td><code class="tag">filetype:pdf annual report</code></td></tr>
-      <tr><td><code class="tag">intitle:</code></td><td>Word must be in the page title</td><td><code class="tag">intitle:changelog</code></td></tr>
-      <tr><td><code class="tag">inurl:</code></td><td>Word must be in the URL</td><td><code class="tag">inurl:docs</code></td></tr>
-      <tr><td><code class="tag">"phrase"</code></td><td>Exact phrase match</td><td><code class="tag">"end of life"</code></td></tr>
-      <tr><td><code class="tag">-word</code></td><td>Excludes a term</td><td><code class="tag">python -snake</code></td></tr>
-      <tr><td><code class="tag">!bang</code></td><td>Redirects the query to another site's own search engine</td><td><code class="tag">!gh react hooks</code></td></tr>
-      <tr><td><code class="tag">~word</code></td><td>Includes synonyms of a term</td><td><code class="tag">~cheap flights</code></td></tr>
+      <tr><td><code class="tag">site:</code></td><td>Restricts results to a domain</td><td><code class="tag">site:example.ru</code></td></tr>
+      <tr><td><code class="tag">mime:</code></td><td>Yandex's equivalent of <code>filetype:</code></td><td><code class="tag">mime:pdf</code></td></tr>
+      <tr><td><code class="tag">title:</code></td><td>Word must be in the page title</td><td><code class="tag">title:прайс-лист</code></td></tr>
+      <tr><td><code class="tag">url:</code></td><td>Word must be in the URL</td><td><code class="tag">url:admin</code></td></tr>
+      <tr><td><code class="tag">&amp;</code></td><td>Both terms in the same sentence</td><td><code class="tag">отчет & 2024</code></td></tr>
+      <tr><td><code class="tag">&amp;&amp;</code></td><td>Both terms anywhere on the same page</td><td><code class="tag">отчет && конфиденциально</code></td></tr>
+      <tr><td><code class="tag">/n</code></td><td>Proximity — terms within n words of each other</td><td><code class="tag">"пароль /3 база"</code></td></tr>
+      <tr><td><code class="tag">-word</code></td><td>Excludes a term</td><td><code class="tag">jaguar -авто</code></td></tr>
+      <tr><td><code class="tag">host:</code></td><td>Includes all subdomains of a host</td><td><code class="tag">host:example.ru</code></td></tr>
     </table>
   </section>
 
   <section class="section">
     <div class="section-eyebrow">02 / Illustrative Patterns</div>
     <h2 class="section-title">Common reconnaissance categories</h2>
-    <p class="lead">Categories most public OSINT guides reference — shown at the pattern level so you understand the intent behind each.</p>
+    <p class="lead">Categories most public OSINT guides reference for Yandex specifically — shown at the pattern level so you understand the intent behind each.</p>
     <div class="card-grid">
       <div class="dork-card">
-        <span class="query">!w Ada Lovelace</span>
-        <p>The <code>!w</code> bang jumps straight to Wikipedia's own search — DuckDuckGo maintains thousands of these shortcuts for major sites.</p>
+        <span class="query">host:target.ru mime:xlsx "конфиденциально"</span>
+        <p>Combines the host-wide operator with a file-type and sensitivity-marker search across an entire domain's subdomains.</p>
       </div>
       <div class="dork-card">
-        <span class="query">filetype:pdf site:.gov "public records request"</span>
-        <p>Combines a file type and a TLD-style site restriction to find government PDF templates.</p>
+        <span class="query">title:"индекс каталога" site:target.ru</span>
+        <p>Yandex's equivalent of the classic directory-listing pattern, phrased for Russian-language server defaults.</p>
       </div>
       <div class="dork-card">
-        <span class="query">intitle:"release notes" inurl:changelog -site:github.com</span>
-        <p>Finds changelog pages outside GitHub specifically, useful when checking a vendor's own release documentation.</p>
+        <span class="query">"логин /2 пароль" site:target.ru</span>
+        <p>Proximity search for "login" occurring within two words of "password" — syntax with no direct Google equivalent.</p>
       </div>
       <div class="dork-card">
-        <span class="query">site:target.com intitle:"index of"</span>
-        <p>The classic directory-listing pattern, useful for checking your own site for misconfigured open folders.</p>
+        <span class="query">url:admin site:target.ru mime:php</span>
+        <p>Looks for admin-panel paths on PHP-driven pages within a specific domain, for authorized infrastructure review.</p>
       </div>
       <div class="dork-card">
-        <span class="query">!yt intitle:"keynote" 2026</span>
-        <p>Uses the YouTube bang combined with a title filter to jump directly into a video-specific search.</p>
+        <span class="query">mime:pdf site:.ru "не для распространения"</span>
+        <p>Finds PDF files carrying a "not for distribution" marker in Russian, indexed despite the restriction.</p>
       </div>
       <div class="dork-card">
-        <span class="query">"internal use only" filetype:xlsx site:target.com</span>
-        <p>Looks for spreadsheets carrying a sensitivity marker that were indexed despite not being meant for public access.</p>
+        <span class="query">host:target.ru "ошибка && mysql"</span>
+        <p>Combines the host operator with a same-page match for an error term and a database name — surfacing verbose error pages.</p>
       </div>
     </div>
   </section>
@@ -144,12 +145,12 @@
     <div class="section-eyebrow">03 / Pro Tips</div>
     <h2 class="section-title">Getting good results</h2>
     <div class="tips">
-      <div class="tip"><div class="num">01</div><div><h4>Bangs save round-trips</h4><p>If you already know which site's own search you want, a bang gets you there without an extra click — check the full directory for one that fits.</p></div></div>
-      <div class="tip"><div class="num">02</div><div><h4>Stack operators instead of running separate searches</h4><p><code class="tag">site:</code> + <code class="tag">filetype:</code> + a quoted phrase in one query filters harder than three loose searches.</p></div></div>
-      <div class="tip"><div class="num">03</div><div><h4>DuckDuckGo doesn't personalize results</h4><p>Because it doesn't track search history, results are more consistent across sessions and devices — useful when reproducing a colleague's search exactly.</p></div></div>
-      <div class="tip"><div class="num">04</div><div><h4>Use <code class="tag">~word</code> when you're not sure of exact phrasing</h4><p>Synonym expansion helps when searching for a concept that might be worded differently across sources.</p></div></div>
-      <div class="tip"><div class="num">05</div><div><h4>Check the "Web" tab specifically for indexed pages</h4><p>DuckDuckGo surfaces Instant Answers and info boxes by default — the plain web results tab is where operator-filtered results actually live.</p></div></div>
-      <div class="tip"><div class="num">06</div><div><h4>Run dorks against your own org first</h4><p>The highest-value use of any of these patterns is turning them inward — finding what your own team has accidentally exposed.</p></div></div>
+      <div class="tip"><div class="num">01</div><div><h4>Lean on Yandex for CIS-region and Cyrillic content</h4><p>Its crawler and ranking are tuned for Russian-language material that Western engines under-index — don't assume absence on Google means absence everywhere.</p></div></div>
+      <div class="tip"><div class="num">02</div><div><h4>Master the proximity operator</h4><p><code class="tag">/n</code> is one of the most powerful tools here — it finds terms near each other without requiring an exact phrase match.</p></div></div>
+      <div class="tip"><div class="num">03</div><div><h4>Use <code class="tag">host:</code> instead of <code class="tag">site:</code> for full-domain sweeps</h4><p><code class="tag">site:</code> matches only the exact subdomain given; <code class="tag">host:</code> automatically includes every subdomain underneath it.</p></div></div>
+      <div class="tip"><div class="num">04</div><div><h4>Mind the difference between <code class="tag">&amp;</code> and <code class="tag">&amp;&amp;</code></h4><p>Single ampersand requires same-sentence proximity; double ampersand only requires same-page — pick based on how tightly related the terms should be.</p></div></div>
+      <div class="tip"><div class="num">05</div><div><h4>Search in the target language, not just transliterated English</h4><p>Native-language queries return dramatically more relevant results on Yandex than English keywords do for Russian-hosted content.</p></div></div>
+      <div class="tip"><div class="num">06</div><div><h4>Run dorks against your own org first</h4><p>The highest-value use of these patterns is auditing your own domain's exposure, especially if you operate infrastructure in the region.</p></div></div>
     </div>
   </section>
 
@@ -159,10 +160,10 @@
     <div class="redacted-box">
       <span class="flag">Read before you search</span>
       <ul>
-        <li><strong>Authorization matters.</strong> If you're testing an organization's exposure, get written scope/permission first, or restrict testing to your own infrastructure.</li>
-        <li><strong>Finding ≠ accessing.</strong> Discovering an exposed file or login page is different from downloading or logging into anything you find.</li>
+        <li><strong>Authorization matters, especially for <code class="tag">host:</code> sweeps.</strong> Full-domain reconnaissance is appropriate for auditing your own organization, not for probing a third party without permission.</li>
+        <li><strong>Finding ≠ accessing.</strong> Discovering an exposed file or admin path is different from downloading or logging into anything you find.</li>
         <li><strong>Report, don't exploit.</strong> If you stumble on someone else's real exposed data, the responsible move is good-faith disclosure, not further probing.</li>
-        <li><strong>Respect robots.txt and site terms.</strong> Some sites explicitly disallow automated scraping of indexed content even when technically reachable.</li>
+        <li><strong>Respect site terms and regional law.</strong> Automated querying at scale can violate a site's terms of service even where each individual query is legitimate.</li>
       </ul>
     </div>
   </section>
@@ -171,14 +172,14 @@
     <div class="section-eyebrow">05 / Sources & Further Intel</div>
     <h2 class="section-title">Go straight to the documentation</h2>
     <div class="refs">
-      <div class="ref"><span class="kind">Official</span><div><a href="https://duckduckgo.com/duckduckgo-help-pages/results/syntax/" target="_blank" rel="noopener">DuckDuckGo Search Syntax</a><p>DuckDuckGo's help page covering supported operators.</p></div></div>
-      <div class="ref"><span class="kind">Official</span><div><a href="https://duckduckgo.com/bang" target="_blank" rel="noopener">DuckDuckGo Bangs Directory</a><p>Full searchable list of thousands of !bang shortcuts.</p></div></div>
-      <div class="ref"><span class="kind">Reference</span><div><a href="https://duckduckgo.com/duckduckgo-help-pages/" target="_blank" rel="noopener">DuckDuckGo Help Pages</a><p>General help hub covering privacy features and search behavior.</p></div></div>
+      <div class="ref"><span class="kind">Official</span><div><a href="https://yandex.com/support/search/how-to-search/search-operators.html" target="_blank" rel="noopener">Yandex Search — Operators Reference</a><p>Yandex's official documentation on Boolean, proximity, and field-specific operators.</p></div></div>
+      <div class="ref"><span class="kind">Official</span><div><a href="https://yandex.com/support/search/" target="_blank" rel="noopener">Yandex Search Help Center</a><p>General help hub covering search features and behavior.</p></div></div>
+      <div class="ref"><span class="kind">Tool</span><div><a href="https://webmaster.yandex.com/" target="_blank" rel="noopener">Yandex Webmaster</a><p>Official dashboard for site indexing status and diagnostics, useful for auditing your own domain's exposure.</p></div></div>
     </div>
   </section>
 
   <footer>
-    <span>Field Manual — DuckDuckGo Search Operators</span>
+    <span>Field Manual — Yandex Search Operators</span>
     <span>For educational & authorized research use</span>
   </footer>
 

@@ -1,77 +1,187 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <style>
-      body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; color: #222; background: #fafafa; line-height: 1.5; }
-      h2 { margin-top: 0; }
-      h3 { margin-top: 28px; border-bottom: 2px solid #FF4500; padding-bottom: 4px; }
-      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; font-size: 0.9rem; }
-      th { background: #FF4500; color: #fff; }
-      code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; }
-      .example { background: #fff; border-left: 4px solid #FF4500; padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
-      .tag { display: inline-block; background: #ffe8dc; color: #b5350a; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-right: 6px; }
-      .usecase { background: #eef7ee; border-left: 4px solid #2e7d32; padding: 8px 12px; margin: 6px 0; font-size: 0.88rem; border-radius: 4px; }
-      .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 8px 12px; margin: 12px 0; font-size: 0.88rem; border-radius: 4px; }
-    </style>
-  </head>
-  <body>
-    <h2>👽 Reddit</h2>
-    <p>Operators for Reddit's own search (<code>reddit.com/search</code>), opened directly - not
-    through a search engine.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Manual: Reddit Search Operators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ece5d4; --card: #f6f1e4; --ink: #211d17; --ink-soft: #4a4438;
+    --manila: #c9a86a; --manila-dark: #a9853f; --stamp-red: #9c3b2e; --teal: #2f5a54;
+    --rule: rgba(33,29,23,0.22); --shadow: rgba(33,29,23,0.18);
+  }
+  *{ box-sizing: border-box; }
+  body{ margin:0; background: radial-gradient(ellipse at top left, rgba(255,255,255,0.25), transparent 60%), var(--paper); color: var(--ink); font-family: 'Source Serif 4', serif; line-height:1.6; }
+  ::selection{ background: var(--manila); color: var(--ink); }
+  .grain{ position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
 
-    <div class="note">
-      <b>Note:</b> Reddit has no <code>since:</code>/<code>until:</code> text operator - date
-      filtering is a URL parameter (<code>t=hour/day/week/month/year/all</code>), not something
-      you type into the query itself.
+  header.cover{ position:relative; margin: 0 auto; padding: 56px 40px 44px; max-width: 900px; border: 2px solid var(--ink); background: var(--card); box-shadow: 0 18px 40px -20px var(--shadow); }
+  .tab{ position:absolute; top:-22px; left:40px; background: var(--manila); border: 2px solid var(--ink); border-bottom: none; padding: 6px 18px 20px; font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 4px 4px 0 0; }
+  .case-no{ font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft); display:flex; justify-content: space-between; margin-bottom: 28px; border-bottom: 1px dashed var(--rule); padding-bottom: 14px; }
+  h1.title{ font-family:'Special Elite', monospace; font-size: clamp(30px, 5vw, 48px); margin: 0 0 6px; line-height:1.1; }
+  .subtitle{ font-family:'IBM Plex Mono', monospace; color: var(--ink-soft); font-size: 14px; margin: 0 0 26px; }
+  .stamp{ position:absolute; right: 36px; bottom: 30px; border: 3px solid var(--stamp-red); color: var(--stamp-red); font-family: 'Special Elite', monospace; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 14px; transform: rotate(-8deg); border-radius: 6px; opacity: 0.85; background: rgba(156,59,46,0.04); }
+  .cover-lede{ max-width: 64ch; font-size: 17px; }
+  .cover-lede strong{ background: linear-gradient(transparent 60%, var(--manila) 60%); }
+
+  .section{ margin-top: 64px; }
+  .section-eyebrow{ font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--manila-dark); display:flex; align-items:center; gap: 12px; margin-bottom: 10px; }
+  .section-eyebrow::after{ content:''; flex:1; height:1px; background: var(--rule); }
+  h2.section-title{ font-family:'Special Elite', monospace; font-size: 26px; margin: 0 0 18px; }
+  p.lead{ color: var(--ink-soft); font-size: 16px; max-width: 68ch; }
+
+  .op-table{ width:100%; border-collapse: collapse; margin-top: 20px; background: var(--card); border: 2px solid var(--ink); }
+  .op-table th{ font-family:'IBM Plex Mono', monospace; font-size: 11px; text-transform:uppercase; letter-spacing: 0.08em; background: var(--ink); color: var(--paper); padding: 10px 14px; text-align:left; }
+  .op-table td{ padding: 12px 14px; border-bottom: 1px solid var(--rule); font-size: 14.5px; vertical-align: top; }
+  .op-table tr:last-child td{ border-bottom:none; }
+  .op-table tr:nth-child(even) td{ background: rgba(201,168,106,0.10); }
+  code.tag{ font-family:'IBM Plex Mono', monospace; background: var(--ink); color: var(--paper); padding: 2px 7px; border-radius: 4px; font-size: 13px; white-space: nowrap; }
+
+  .card-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 18px; margin-top: 22px; }
+  .dork-card{ background: var(--card); border: 1.5px solid var(--ink); border-radius: 2px; padding: 18px 18px 16px; box-shadow: 4px 4px 0 var(--rule); transition: transform .15s ease, box-shadow .15s ease; }
+  .dork-card:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--manila-dark); }
+  .query{ display:block; font-family:'IBM Plex Mono', monospace; font-size: 12.8px; background: var(--ink); color: #dcd3bb; padding: 10px 12px; border-radius: 3px; overflow-x: auto; margin-bottom: 10px; white-space: pre; }
+  .dork-card p{ font-size: 13.5px; color: var(--ink-soft); margin: 0; }
+
+  .tips{ margin-top: 20px; display:flex; flex-direction:column; gap: 14px; }
+  .tip{ display:grid; grid-template-columns: 46px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border-left: 4px solid var(--manila-dark); }
+  .tip .num{ font-family:'Special Elite', monospace; font-size: 22px; color: var(--manila-dark); text-align:center; }
+  .tip h4{ margin: 0 0 4px; font-size: 15.5px; }
+  .tip p{ margin:0; color: var(--ink-soft); font-size: 14px; }
+
+  .redacted-box{ margin-top: 26px; border: 2px dashed var(--stamp-red); padding: 22px 24px; background: rgba(156,59,46,0.05); }
+  .redacted-box .flag{ font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--stamp-red); font-weight:700; margin-bottom: 10px; display:block; }
+  .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
+  .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
+  .redacted-box strong{ color: var(--ink); }
+
+  .refs{ margin-top: 20px; display:flex; flex-direction:column; gap: 12px; }
+  .ref{ display:grid; grid-template-columns: 92px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); }
+  .ref .kind{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:0.08em; text-transform:uppercase; color: var(--paper); background: var(--teal); padding: 4px 8px; border-radius: 3px; text-align:center; height: fit-content; }
+  .ref a{ color: var(--ink); font-weight:600; text-decoration: none; border-bottom: 1.5px solid var(--manila-dark); }
+  .ref a:hover{ color: var(--teal); }
+  .ref p{ margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+
+  footer{ margin-top: 70px; padding-top: 20px; border-top: 1px solid var(--rule); font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap: 10px; }
+
+  @media (max-width: 600px){
+    header.cover{ padding: 48px 20px 32px; }
+    .stamp{ position:static; display:inline-block; margin-top: 18px; transform: rotate(-4deg); }
+    .case-no{ flex-direction:column; gap:4px; }
+    .ref{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="tab">Research Notes</div>
+    <div class="case-no">
+      <span>CLASSIFICATION: PUBLIC / EDUCATIONAL</span>
     </div>
+    <h1 class="title">Reddit</h1>
+    <p class="subtitle">A field guide to advanced search-operator reconnaissance on Reddit</p>
+    <p class="cover-lede">Reddit's native search is community- and metadata-aware rather than full-web crawling. Most of its power comes from scoping by subreddit, author, flair, and content type — combined with Google's own <strong>site:reddit.com</strong> index, which often surfaces older threads better than Reddit's own search does.</p>
+    <div class="stamp">Authorized use only</div>
+  </header>
 
-    <h3>Filters</h3>
-    <table>
-      <tr><th>Filter</th><th>What it does</th></tr>
-      <tr><td><code>title:</code></td><td>Searches only within post titles</td></tr>
-      <tr><td><code>selftext:</code></td><td>Searches only within self (text) post bodies</td></tr>
-      <tr><td><code>author:</code></td><td>Posts/comments by a specific username</td></tr>
-      <tr><td><code>subreddit:</code></td><td>Restricts to a specific subreddit</td></tr>
-      <tr><td><code>url:</code></td><td>Matches a substring within the linked URL</td></tr>
-      <tr><td><code>flair:</code></td><td>Posts tagged with a specific flair</td></tr>
-      <tr><td><code>self:yes / self:no</code></td><td>Text posts only / link posts only</td></tr>
-      <tr><td><code>nsfw:yes / nsfw:no</code></td><td>Includes or excludes NSFW-flagged posts</td></tr>
+  <section class="section">
+    <div class="section-eyebrow">01 / Core Operators</div>
+    <h2 class="section-title">The syntax you'll actually use</h2>
+    <p class="lead">These work in Reddit's own search bar. A few (marked) rely on Google's index of Reddit instead, which is useful when Reddit's internal search comes up thin.</p>
+    <table class="op-table">
+      <tr><th>Operator</th><th>What it does</th><th>Example</th></tr>
+      <tr><td><code class="tag">subreddit:</code></td><td>Restricts results to one community</td><td><code class="tag">subreddit:sysadmin backup strategy</code></td></tr>
+      <tr><td><code class="tag">author:</code></td><td>Posts by a specific redditor</td><td><code class="tag">author:spez</code></td></tr>
+      <tr><td><code class="tag">title:</code></td><td>Word must appear in the post title</td><td><code class="tag">title:"post-mortem"</code></td></tr>
+      <tr><td><code class="tag">selftext:</code></td><td>Word must appear in the post body</td><td><code class="tag">selftext:"root cause"</code></td></tr>
+      <tr><td><code class="tag">flair:</code></td><td>Filters by a subreddit's flair tag</td><td><code class="tag">flair:"Solved" subreddit:homelab</code></td></tr>
+      <tr><td><code class="tag">self:</code></td><td>Restricts to text posts vs link posts (1/0)</td><td><code class="tag">self:1 subreddit:AskEngineers</code></td></tr>
+      <tr><td><code class="tag">nsfw:</code></td><td>Include or exclude NSFW-flagged posts (1/0)</td><td><code class="tag">nsfw:0</code></td></tr>
+      <tr><td><code class="tag">site:reddit.com</code> <em>(Google)</em></td><td>Searches Reddit content through Google's index instead</td><td><code class="tag">site:reddit.com "error 502" 2024</code></td></tr>
     </table>
+  </section>
 
-    <h3>Operators</h3>
-    <table>
-      <tr><th>Operator</th><th>What it does</th></tr>
-      <tr><td><code>"phrase"</code></td><td>Exact phrase match</td></tr>
-      <tr><td><code>AND</code></td><td>All terms required</td></tr>
-      <tr><td><code>OR</code></td><td>Either term matches</td></tr>
-      <tr><td><code>-</code></td><td>Excludes a term</td></tr>
-      <tr><td><code>()</code></td><td>Groups operators for combined logic</td></tr>
-    </table>
-
-    <h3>Sample Dorks</h3>
-    <div class="example">
-      <span class="tag">Author + keyword</span><br>
-      <code>author:johndoe "career advice"</code>
-      <p>Posts by a specific user mentioning a phrase.</p>
+  <section class="section">
+    <div class="section-eyebrow">02 / Illustrative Patterns</div>
+    <h2 class="section-title">Common reconnaissance categories</h2>
+    <p class="lead">Categories most OSINT and community-research guides reference — shown at the pattern level so you understand the intent behind each.</p>
+    <div class="card-grid">
+      <div class="dork-card">
+        <span class="query">subreddit:cybersecurity flair:"Career" author:AutoModerator</span>
+        <p>Pulls stickied or automated career-thread posts from a specific community — useful for building a reading list without manual scrolling.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">site:reddit.com "yourproduct" ("bug" OR "broken") -inurl:comments</span>
+        <p>Uses Google's index of Reddit to find top-level product complaints, often ranked better than Reddit's own search for older threads.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">title:"AMA" subreddit:IAmA since:2024</span>
+        <p>Scopes an AMA search to a single year using Reddit's date filter alongside the title operator.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">selftext:"data breach" subreddit:sysadmin self:1</span>
+        <p>Finds first-hand text-post accounts discussing an incident, filtering out link-only posts that just reference an external article.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">author:yourcompany_official</span>
+        <p>A quick way for a brand to review everything its own official account has posted, for a content or consistency audit.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">site:reddit.com intitle:"index of" -subreddit</span>
+        <p>An example of a cross-platform pattern (borrowed from Google dorking) applied narrowly to Reddit-hosted content that leaked directory-style listings in a post.</p>
+      </div>
     </div>
-    <div class="example">
-      <span class="tag">Title-only search</span><br>
-      <code>title:"looking for" subreddit:jobs</code>
-      <p>Restricts a phrase match to post titles within one subreddit.</p>
-    </div>
-    <div class="example">
-      <span class="tag">External link posts</span><br>
-      <code>url:"medium.com" self:no</code>
-      <p>Finds link posts pointing to a specific external domain.</p>
-    </div>
+  </section>
 
-    <h3>When to use Reddit dorking</h3>
-    <div class="usecase"><b>Community sentiment research</b> — see how a product, brand, or topic is discussed by real users, unfiltered by marketing.</div>
-    <div class="usecase"><b>Username/handle verification</b> — check if a person's claimed Reddit account has a real, consistent post history.</div>
-    <div class="usecase"><b>Niche technical troubleshooting</b> — subreddit-scoped search often surfaces obscure fixes not indexed well by general search engines.</div>
-    <div class="usecase"><b>Tracking link mentions</b> — find every place a specific domain/article has been shared and discussed.</div>
+  <section class="section">
+    <div class="section-eyebrow">03 / Pro Tips</div>
+    <h2 class="section-title">Getting good results</h2>
+    <div class="tips">
+      <div class="tip"><div class="num">01</div><div><h4>Use Google's index for older threads</h4><p>Reddit's own search historically deprioritizes older or lower-engagement posts; <code class="tag">site:reddit.com</code> in Google often surfaces them better.</p></div></div>
+      <div class="tip"><div class="num">02</div><div><h4>Combine subreddit + flair for triage boards</h4><p>Many support subreddits use flair as a status system ("Solved", "Open") — filtering on both narrows straight to resolved or open cases.</p></div></div>
+      <div class="tip"><div class="num">03</div><div><h4>Use <code class="tag">self:1</code> to skip link-spam</h4><p>Restricting to text posts filters out reposted news links and leaves first-hand discussion.</p></div></div>
+      <div class="tip"><div class="num">04</div><div><h4>Old.reddit.com renders search results more predictably</h4><p>The legacy interface often shows more granular sort and time-filter controls than the redesigned site.</p></div></div>
+      <div class="tip"><div class="num">05</div><div><h4>Archive before you cite</h4><p>Posts and comments can be deleted or edited — screenshot or archive anything you plan to reference later.</p></div></div>
+      <div class="tip"><div class="num">06</div><div><h4>Run the same search on your own brand</h4><p>The highest-value use for most teams is checking what's being said about their own product across relevant subreddits before it surfaces elsewhere.</p></div></div>
+    </div>
+  </section>
 
-    <p style="margin-top:24px;color:#888;">— Add more examples here as you build out this reference file.</p>
-  </body>
+  <section class="section">
+    <div class="section-eyebrow">04 / Scope & Ethics</div>
+    <h2 class="section-title">Where the line is</h2>
+    <div class="redacted-box">
+      <span class="flag">Read before you search</span>
+      <ul>
+        <li><strong>Public posts, not private lives.</strong> A post being publicly searchable doesn't license using it to dox, harass, or build a profile on a private individual.</li>
+        <li><strong>Respect subreddit and platform rules.</strong> Some communities restrict screenshotting or reposting content outside the sub — check community rules before redistributing anything you find.</li>
+        <li><strong>Verify before you amplify.</strong> Reddit posts are self-reported and unverified by default — corroborate with independent sources before treating claims as fact.</li>
+        <li><strong>Report, don't exploit.</strong> If a search surfaces someone else's exposed personal data, the responsible step is reporting it to Reddit, not further digging.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">05 / Sources & Further Intel</div>
+    <h2 class="section-title">Go straight to the documentation</h2>
+    <div class="refs">
+      <div class="ref"><span class="kind">Official</span><div><a href="https://support.reddithelp.com/hc/en-us/articles/17330871523860" target="_blank" rel="noopener">Reddit Help — Search Tips</a><p>Reddit's own documentation on subreddit:, author:, flair:, and other search operators.</p></div></div>
+      <div class="ref"><span class="kind">Tool</span><div><a href="https://www.reddit.com/search/" target="_blank" rel="noopener">Reddit Search</a><p>The native search interface where these operators can be tested directly.</p></div></div>
+      <div class="ref"><span class="kind">Reference</span><div><a href="https://www.reddit.com/r/help/" target="_blank" rel="noopener">r/help</a><p>Reddit's own community for platform questions, including search behavior quirks.</p></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Field Manual — Reddit Search Operators</span>
+    <span>For educational & authorized research use</span>
+  </footer>
+
+</div>
+</body>
 </html>

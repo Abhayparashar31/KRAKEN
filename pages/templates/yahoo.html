@@ -1,72 +1,187 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <style>
-      body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; color: #222; background: #fafafa; line-height: 1.5; }
-      h2 { margin-top: 0; }
-      h3 { margin-top: 28px; border-bottom: 2px solid #6001D2; padding-bottom: 4px; }
-      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; font-size: 0.9rem; }
-      th { background: #6001D2; color: #fff; }
-      code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; }
-      .example { background: #fff; border-left: 4px solid #6001D2; padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
-      .tag { display: inline-block; background: #f0e3fc; color: #4b0298; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-right: 6px; }
-      .usecase { background: #eef7ee; border-left: 4px solid #2e7d32; padding: 8px 12px; margin: 6px 0; font-size: 0.88rem; border-radius: 4px; }
-      .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 8px 12px; margin: 12px 0; font-size: 0.88rem; border-radius: 4px; }
-    </style>
-  </head>
-  <body>
-    <h2>🟣 Yahoo</h2>
-    <p>Yahoo Search runs on a smaller, less consistently-honored operator set than Google,
-    partly because results are blended with Bing under the hood.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Manual: Yahoo Search Operators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ece5d4; --card: #f6f1e4; --ink: #211d17; --ink-soft: #4a4438;
+    --manila: #c9a86a; --manila-dark: #a9853f; --stamp-red: #9c3b2e; --teal: #2f5a54;
+    --rule: rgba(33,29,23,0.22); --shadow: rgba(33,29,23,0.18);
+  }
+  *{ box-sizing: border-box; }
+  body{ margin:0; background: radial-gradient(ellipse at top left, rgba(255,255,255,0.25), transparent 60%), var(--paper); color: var(--ink); font-family: 'Source Serif 4', serif; line-height:1.6; }
+  ::selection{ background: var(--manila); color: var(--ink); }
+  .grain{ position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
 
-    <div class="note">
-      <b>Unreliable on Yahoo:</b> <code>filetype:</code> support has degraded over the years and
-      is best-effort rather than guaranteed. There's no reliable date-range operator, and
-      allintext/allinurl/allintitle/inanchor/related/cache have no equivalent.
+  header.cover{ position:relative; margin: 0 auto; padding: 56px 40px 44px; max-width: 900px; border: 2px solid var(--ink); background: var(--card); box-shadow: 0 18px 40px -20px var(--shadow); }
+  .tab{ position:absolute; top:-22px; left:40px; background: var(--manila); border: 2px solid var(--ink); border-bottom: none; padding: 6px 18px 20px; font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 4px 4px 0 0; }
+  .case-no{ font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft); display:flex; justify-content: space-between; margin-bottom: 28px; border-bottom: 1px dashed var(--rule); padding-bottom: 14px; }
+  h1.title{ font-family:'Special Elite', monospace; font-size: clamp(30px, 5vw, 48px); margin: 0 0 6px; line-height:1.1; }
+  .subtitle{ font-family:'IBM Plex Mono', monospace; color: var(--ink-soft); font-size: 14px; margin: 0 0 26px; }
+  .stamp{ position:absolute; right: 36px; bottom: 30px; border: 3px solid var(--stamp-red); color: var(--stamp-red); font-family: 'Special Elite', monospace; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 14px; transform: rotate(-8deg); border-radius: 6px; opacity: 0.85; background: rgba(156,59,46,0.04); }
+  .cover-lede{ max-width: 64ch; font-size: 17px; }
+  .cover-lede strong{ background: linear-gradient(transparent 60%, var(--manila) 60%); }
+
+  .section{ margin-top: 64px; }
+  .section-eyebrow{ font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--manila-dark); display:flex; align-items:center; gap: 12px; margin-bottom: 10px; }
+  .section-eyebrow::after{ content:''; flex:1; height:1px; background: var(--rule); }
+  h2.section-title{ font-family:'Special Elite', monospace; font-size: 26px; margin: 0 0 18px; }
+  p.lead{ color: var(--ink-soft); font-size: 16px; max-width: 68ch; }
+
+  .op-table{ width:100%; border-collapse: collapse; margin-top: 20px; background: var(--card); border: 2px solid var(--ink); }
+  .op-table th{ font-family:'IBM Plex Mono', monospace; font-size: 11px; text-transform:uppercase; letter-spacing: 0.08em; background: var(--ink); color: var(--paper); padding: 10px 14px; text-align:left; }
+  .op-table td{ padding: 12px 14px; border-bottom: 1px solid var(--rule); font-size: 14.5px; vertical-align: top; }
+  .op-table tr:last-child td{ border-bottom:none; }
+  .op-table tr:nth-child(even) td{ background: rgba(201,168,106,0.10); }
+  code.tag{ font-family:'IBM Plex Mono', monospace; background: var(--ink); color: var(--paper); padding: 2px 7px; border-radius: 4px; font-size: 13px; white-space: nowrap; }
+
+  .card-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 18px; margin-top: 22px; }
+  .dork-card{ background: var(--card); border: 1.5px solid var(--ink); border-radius: 2px; padding: 18px 18px 16px; box-shadow: 4px 4px 0 var(--rule); transition: transform .15s ease, box-shadow .15s ease; }
+  .dork-card:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--manila-dark); }
+  .query{ display:block; font-family:'IBM Plex Mono', monospace; font-size: 12.8px; background: var(--ink); color: #dcd3bb; padding: 10px 12px; border-radius: 3px; overflow-x: auto; margin-bottom: 10px; white-space: pre; }
+  .dork-card p{ font-size: 13.5px; color: var(--ink-soft); margin: 0; }
+
+  .tips{ margin-top: 20px; display:flex; flex-direction:column; gap: 14px; }
+  .tip{ display:grid; grid-template-columns: 46px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border-left: 4px solid var(--manila-dark); }
+  .tip .num{ font-family:'Special Elite', monospace; font-size: 22px; color: var(--manila-dark); text-align:center; }
+  .tip h4{ margin: 0 0 4px; font-size: 15.5px; }
+  .tip p{ margin:0; color: var(--ink-soft); font-size: 14px; }
+
+  .redacted-box{ margin-top: 26px; border: 2px dashed var(--stamp-red); padding: 22px 24px; background: rgba(156,59,46,0.05); }
+  .redacted-box .flag{ font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--stamp-red); font-weight:700; margin-bottom: 10px; display:block; }
+  .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
+  .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
+  .redacted-box strong{ color: var(--ink); }
+
+  .refs{ margin-top: 20px; display:flex; flex-direction:column; gap: 12px; }
+  .ref{ display:grid; grid-template-columns: 92px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink); }
+  .ref .kind{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:0.08em; text-transform:uppercase; color: var(--paper); background: var(--teal); padding: 4px 8px; border-radius: 3px; text-align:center; height: fit-content; }
+  .ref a{ color: var(--ink); font-weight:600; text-decoration: none; border-bottom: 1.5px solid var(--manila-dark); }
+  .ref a:hover{ color: var(--teal); }
+  .ref p{ margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+
+  footer{ margin-top: 70px; padding-top: 20px; border-top: 1px solid var(--rule); font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap: 10px; }
+
+  @media (max-width: 600px){
+    header.cover{ padding: 48px 20px 32px; }
+    .stamp{ position:static; display:inline-block; margin-top: 18px; transform: rotate(-4deg); }
+    .case-no{ flex-direction:column; gap:4px; }
+    .ref{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="tab">Research Notes</div>
+    <div class="case-no">
+      <span>CLASSIFICATION: PUBLIC / EDUCATIONAL</span>
     </div>
+    <h1 class="title">Yahoo</h1>
+    <p class="subtitle">A field guide to advanced search-operator reconnaissance on Yahoo</p>
+    <p class="cover-lede">Yahoo Search runs on Bing's index and infrastructure, so its operator set closely tracks Bing's core syntax, with a couple of Yahoo-specific holdovers from its earlier standalone search engine.</p>
+    <div class="stamp">Authorized use only</div>
+  </header>
 
-    <h3>Filters</h3>
-    <table>
-      <tr><th>Filter</th><th>What it does</th></tr>
-      <tr><td><code>intitle:</code></td><td>Finds pages with the keyword in the page title</td></tr>
-      <tr><td><code>inurl:</code></td><td>Searches for URLs containing the specified keyword</td></tr>
-      <tr><td><code>site:</code></td><td>Restricts results to a specific website or domain</td></tr>
-      <tr><td><code>link:</code></td><td>Finds pages that link to a specific URL</td></tr>
-      <tr><td><code>filetype:</code></td><td>Best-effort file type filter (not always honored)</td></tr>
+  <section class="section">
+    <div class="section-eyebrow">01 / Core Operators</div>
+    <h2 class="section-title">The syntax you'll actually use</h2>
+    <p class="lead">Because Yahoo results are Bing-powered under the hood, most Bing operators carry over directly.</p>
+    <table class="op-table">
+      <tr><th>Operator</th><th>What it does</th><th>Example</th></tr>
+      <tr><td><code class="tag">site:</code></td><td>Restricts results to a domain</td><td><code class="tag">site:nytimes.com</code></td></tr>
+      <tr><td><code class="tag">filetype:</code></td><td>Limits results to a file extension</td><td><code class="tag">filetype:doc</code></td></tr>
+      <tr><td><code class="tag">intitle:</code></td><td>Word must be in the page title</td><td><code class="tag">intitle:review</code></td></tr>
+      <tr><td><code class="tag">inurl:</code></td><td>Word must be in the URL</td><td><code class="tag">inurl:pricing</code></td></tr>
+      <tr><td><code class="tag">"phrase"</code></td><td>Exact phrase match</td><td><code class="tag">"terms of service"</code></td></tr>
+      <tr><td><code class="tag">-word</code></td><td>Excludes a term</td><td><code class="tag">jaguar -car</code></td></tr>
+      <tr><td><code class="tag">OR</code></td><td>Matches either term</td><td><code class="tag">"annual report" OR "10-K"</code></td></tr>
+      <tr><td><code class="tag">link:</code></td><td>Legacy operator, largely deprecated today</td><td><code class="tag">link:example.com</code> (unreliable)</td></tr>
     </table>
+  </section>
 
-    <h3>Operators</h3>
-    <table>
-      <tr><th>Operator</th><th>What it does</th></tr>
-      <tr><td><code>"phrase"</code></td><td>Exact phrase match</td></tr>
-      <tr><td><code>OR</code></td><td>Matches either term</td></tr>
-      <tr><td><code>-</code></td><td>Excludes a term</td></tr>
-      <tr><td><code>()</code></td><td>Groups operators for combined logic</td></tr>
-    </table>
-
-    <h3>Sample Dorks</h3>
-    <div class="example">
-      <span class="tag">Domain-restricted search</span><br>
-      <code>site:example.com "contact us"</code>
-      <p>Finds contact pages on a specific domain.</p>
+  <section class="section">
+    <div class="section-eyebrow">02 / Illustrative Patterns</div>
+    <h2 class="section-title">Common reconnaissance categories</h2>
+    <p class="lead">Categories most public OSINT guides reference — shown at the pattern level so you understand the intent behind each.</p>
+    <div class="card-grid">
+      <div class="dork-card">
+        <span class="query">site:linkedin.com/in intitle:"product manager" "fintech"</span>
+        <p>A classic profile-discovery pattern that works nearly identically across Yahoo, Bing, and Google since all three index LinkedIn similarly.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">filetype:pptx site:.edu "cybersecurity syllabus"</span>
+        <p>Finds publicly posted course slide decks from educational domains.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">intitle:"index of" site:target.com</span>
+        <p>Surfaces open directory listings — a classic sign of a misconfigured web server exposing its file structure.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">site:target.com filetype:pdf "confidential"</span>
+        <p>Finds PDF documents carrying a sensitivity marker that were indexed despite not being meant for public access.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">inurl:login site:target.com</span>
+        <p>Helps map which subdomains expose admin or user login pages — useful for authorized scoping, not credential attempts.</p>
+      </div>
+      <div class="dork-card">
+        <span class="query">"annual report" OR "10-K" filetype:pdf site:target.com</span>
+        <p>Combines OR logic with a file type to catch financial disclosures regardless of which naming convention was used.</p>
+      </div>
     </div>
-    <div class="example">
-      <span class="tag">Title match</span><br>
-      <code>intitle:"John Doe" "profile"</code>
-      <p>Finds profile-style pages with a name in the title.</p>
-    </div>
-    <div class="example">
-      <span class="tag">Inbound links</span><br>
-      <code>link:example.com -site:example.com</code>
-      <p>Finds pages elsewhere on the web linking to a target domain.</p>
-    </div>
+  </section>
 
-    <h3>When to use Yahoo dorking</h3>
-    <div class="usecase"><b>Third opinion / redundancy</b> — occasionally surfaces older or smaller indexed pages that Google and Bing have dropped or deprioritized.</div>
-    <div class="usecase"><b>Legacy web content</b> — Yahoo's index has historically retained older pages longer in some niches.</div>
-    <div class="usecase"><b>Cross-checking link: results</b> — useful as a secondary source when researching backlinks, since Google deprecated its own link: reliability years ago.</div>
+  <section class="section">
+    <div class="section-eyebrow">03 / Pro Tips</div>
+    <h2 class="section-title">Getting good results</h2>
+    <div class="tips">
+      <div class="tip"><div class="num">01</div><div><h4>Treat it as "Bing with a different skin"</h4><p>If a Bing-specific operator doesn't return expected results on Yahoo, try the query directly on Bing to compare.</p></div></div>
+      <div class="tip"><div class="num">02</div><div><h4>Use quotes liberally</h4><p>Yahoo's relevance ranking can be looser than Google's — exact phrase matching helps cut down on tangential results.</p></div></div>
+      <div class="tip"><div class="num">03</div><div><h4>Don't rely on <code class="tag">link:</code></h4><p>Like most engines today, Yahoo's backlink operator is unreliable — use Bing Webmaster Tools or a dedicated backlink service instead.</p></div></div>
+      <div class="tip"><div class="num">04</div><div><h4>Check both Yahoo and Bing for the same query</h4><p>Minor indexing differences mean a page missing on one occasionally turns up on the other.</p></div></div>
+      <div class="tip"><div class="num">05</div><div><h4>Use OR groups for naming-convention variance</h4><p>Organizations often use inconsistent terms for the same document type — OR queries catch more of them in one pass.</p></div></div>
+      <div class="tip"><div class="num">06</div><div><h4>Run dorks against your own org first</h4><p>The highest-value use of these patterns is inward-facing: catching your own exposed files before someone else does.</p></div></div>
+    </div>
+  </section>
 
-    <p style="margin-top:24px;color:#888;">— Add more examples here as you build out this reference file.</p>
-  </body>
+  <section class="section">
+    <div class="section-eyebrow">04 / Scope & Ethics</div>
+    <h2 class="section-title">Where the line is</h2>
+    <div class="redacted-box">
+      <span class="flag">Read before you search</span>
+      <ul>
+        <li><strong>Authorization matters.</strong> If you're testing an organization's exposure, get written scope/permission first, or restrict testing to your own infrastructure.</li>
+        <li><strong>Finding ≠ accessing.</strong> Discovering an exposed file or login page is different from downloading or logging into anything you find.</li>
+        <li><strong>Report, don't exploit.</strong> If you stumble on someone else's real exposed data, the responsible move is good-faith disclosure, not further probing.</li>
+        <li><strong>Respect site terms.</strong> Some sites explicitly disallow automated scraping of indexed content even when technically reachable.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">05 / Sources & Further Intel</div>
+    <h2 class="section-title">Go straight to the documentation</h2>
+    <div class="refs">
+      <div class="ref"><span class="kind">Official</span><div><a href="https://help.yahoo.com/kb/SLN2413.html" target="_blank" rel="noopener">Yahoo Search Help</a><p>Yahoo's documentation on supported search operators.</p></div></div>
+      <div class="ref"><span class="kind">Official</span><div><a href="https://help.yahoo.com/kb/search" target="_blank" rel="noopener">Yahoo Search Help Center</a><p>General help hub covering Yahoo Search features and behavior.</p></div></div>
+      <div class="ref"><span class="kind">Related</span><div><a href="https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/reference/query-parameters" target="_blank" rel="noopener">Microsoft Bing — Advanced Search Keywords</a><p>Useful cross-reference since Yahoo results run on Bing's index.</p></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Field Manual — Yahoo Search Operators</span>
+    <span>For educational & authorized research use</span>
+  </footer>
+
+</div>
+</body>
 </html>
