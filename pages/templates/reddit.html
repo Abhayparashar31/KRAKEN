@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; color: #222; background: #fafafa; line-height: 1.5; }
+      h2 { margin-top: 0; }
+      h3 { margin-top: 28px; border-bottom: 2px solid #FF4500; padding-bottom: 4px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; font-size: 0.9rem; }
+      th { background: #FF4500; color: #fff; }
+      code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; }
+      .example { background: #fff; border-left: 4px solid #FF4500; padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
+      .tag { display: inline-block; background: #ffe8dc; color: #b5350a; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-right: 6px; }
+      .usecase { background: #eef7ee; border-left: 4px solid #2e7d32; padding: 8px 12px; margin: 6px 0; font-size: 0.88rem; border-radius: 4px; }
+      .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 8px 12px; margin: 12px 0; font-size: 0.88rem; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h2>👽 Reddit</h2>
+    <p>Operators for Reddit's own search (<code>reddit.com/search</code>), opened directly - not
+    through a search engine.</p>
+
+    <div class="note">
+      <b>Note:</b> Reddit has no <code>since:</code>/<code>until:</code> text operator - date
+      filtering is a URL parameter (<code>t=hour/day/week/month/year/all</code>), not something
+      you type into the query itself.
+    </div>
+
+    <h3>Filters</h3>
+    <table>
+      <tr><th>Filter</th><th>What it does</th></tr>
+      <tr><td><code>title:</code></td><td>Searches only within post titles</td></tr>
+      <tr><td><code>selftext:</code></td><td>Searches only within self (text) post bodies</td></tr>
+      <tr><td><code>author:</code></td><td>Posts/comments by a specific username</td></tr>
+      <tr><td><code>subreddit:</code></td><td>Restricts to a specific subreddit</td></tr>
+      <tr><td><code>url:</code></td><td>Matches a substring within the linked URL</td></tr>
+      <tr><td><code>flair:</code></td><td>Posts tagged with a specific flair</td></tr>
+      <tr><td><code>self:yes / self:no</code></td><td>Text posts only / link posts only</td></tr>
+      <tr><td><code>nsfw:yes / nsfw:no</code></td><td>Includes or excludes NSFW-flagged posts</td></tr>
+    </table>
+
+    <h3>Operators</h3>
+    <table>
+      <tr><th>Operator</th><th>What it does</th></tr>
+      <tr><td><code>"phrase"</code></td><td>Exact phrase match</td></tr>
+      <tr><td><code>AND</code></td><td>All terms required</td></tr>
+      <tr><td><code>OR</code></td><td>Either term matches</td></tr>
+      <tr><td><code>-</code></td><td>Excludes a term</td></tr>
+      <tr><td><code>()</code></td><td>Groups operators for combined logic</td></tr>
+    </table>
+
+    <h3>Sample Dorks</h3>
+    <div class="example">
+      <span class="tag">Author + keyword</span><br>
+      <code>author:johndoe "career advice"</code>
+      <p>Posts by a specific user mentioning a phrase.</p>
+    </div>
+    <div class="example">
+      <span class="tag">Title-only search</span><br>
+      <code>title:"looking for" subreddit:jobs</code>
+      <p>Restricts a phrase match to post titles within one subreddit.</p>
+    </div>
+    <div class="example">
+      <span class="tag">External link posts</span><br>
+      <code>url:"medium.com" self:no</code>
+      <p>Finds link posts pointing to a specific external domain.</p>
+    </div>
+
+    <h3>When to use Reddit dorking</h3>
+    <div class="usecase"><b>Community sentiment research</b> — see how a product, brand, or topic is discussed by real users, unfiltered by marketing.</div>
+    <div class="usecase"><b>Username/handle verification</b> — check if a person's claimed Reddit account has a real, consistent post history.</div>
+    <div class="usecase"><b>Niche technical troubleshooting</b> — subreddit-scoped search often surfaces obscure fixes not indexed well by general search engines.</div>
+    <div class="usecase"><b>Tracking link mentions</b> — find every place a specific domain/article has been shared and discussed.</div>
+
+    <p style="margin-top:24px;color:#888;">— Add more examples here as you build out this reference file.</p>
+  </body>
+</html>

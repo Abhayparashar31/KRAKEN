@@ -1,0 +1,156 @@
+KRAKEN — ENGINE MODULE CONTRACT / INSTRUCTIONS
+=================================================
+Each search-engine module (engines/google.py, engines/yandex.py,
+engines/bing.py, ...) is now FULLY SELF-CONTAINED. It owns:
+  1) the raw dork query syntax for that specific engine
+  2) the final clickable URL construction for that engine
+
+app.py knows NOTHING about any engine's specific operators or URL
+format. It only calls generate_dorks(...) on whichever engine modules
+the user selected, and displays whatever comes back. This is why
+adding a new engine (e.g. Yandex, Bing, Yahoo, Startpage) requires
+ZERO changes to app.py — just drop a new file into engines/ that
+follows the contract below.
+
+Folder layout
+-------------
+kraken/
+  app.py
+  instructions.txt        <- this file
+  requirements.txt
+  engines/
+    __init__.py
+    google.py
+    duckduckgo.py
+    ...add more here (yandex.py, bing.py, yahoo.py, startpage.py)
+  platforms/
+    __init__.py
+    x.py
+    ...add more here (facebook.py, reddit.py, instagram.py)
+
+
+===========================================================
+HOW TO ADD A NEW SEARCH ENGINE
+===========================================================
+
+1. Create engines/<enginename>.py (lowercase, e.g. yandex.py)
+
+2. Required module-level constant:
+     NAME : str   -> human-readable name, e.g. "Yandex"
+
+3. Required function:
+
+     def generate_dorks(value, ptype, date_from=None, date_to=None):
+         """
+         INPUT
+         -----
+         value      : str
+                      Raw parameter typed by the user, e.g.
+                      "John Doe", "john_doe99", "john@example.com",
+                      "+1 202 555 0143", "example.com"
+
+         ptype      : str
+                      One of app.py's PARAM_TYPES:
+                        "Person / Full Name"
+                        "Username / Handle"
+                        "Email Address"
+                        "Phone Number"
+                        "Website / Domain"
+                        "Generic Keyword"
+                      Use this to decide how to format the value
+                      (e.g. "Website / Domain" usually means you
+                      should build site:/host: style dorks instead
+                      of wrapping it in quotes as free text).
+
+         date_from  : str | None   ISO date "YYYY-MM-DD" or None
+         date_to    : str | None   ISO date "YYYY-MM-DD" or None
+                      If this engine doesn't support date filtering
+                      (e.g. DuckDuckGo), just ignore these params -
+                      do NOT fabricate a fake operator that silently
+                      does nothing.
+
+         PROCESSING
+         ----------
+         - Use ONLY operators this engine actually supports. Do not
+           copy Google's operator set onto an engine that doesn't
+           honor it (e.g. Yandex uses mime: not filetype:, date:X..Y
+           not after:/before:, title: not intitle:).
+         - Build a full spread of dork categories relevant to that
+           engine. At minimum, aim to cover the same category names
+           other engine modules use, so the UI stays consistent:
+               "General-Dorks"
+               "Operator-Dorks"
+               "File-Mentions"
+               "Image-Dorks"
+               "Video-Audio-Dorks"
+               "Email-Dorks"
+               "Password-Dorks"
+               "Intitle-Dorks"
+           (Skip a category entirely if the engine has no equivalent
+           - do not fake it.)
+         - For each dork, ALSO build the final URL using that
+           engine's own query-string format and any engine-specific
+           parameters (e.g. Google image search needs
+           &tbm=isch&sclient=img, Yandex image search needs a
+           different path entirely: yandex.com/images/search).
+         - Deduplicate identical raw dorks before returning.
+         - Collapse extra whitespace in every dork string.
+
+         OUTPUT
+         ------
+         Returns: dict[str, list[tuple[str, str, str]]]
+             category_name -> [(label, raw_dork, full_url), ...]
+
+             - label     : short human-readable description
+             - raw_dork  : the plain dork string with NO url-encoding
+                           and NO engine base URL, e.g.
+                           'site:example.com filetype:pdf "John Doe"'
+             - full_url  : the complete, clickable, url-encoded
+                           search URL for this engine, e.g.
+                           'https://www.google.com/search?q=site%3A...'
+         """
+         raise NotImplementedError
+
+4. That's it. app.py auto-discovers every .py file in engines/
+   (excluding __init__.py) via pkgutil and lists NAME as a
+   selectable option — no other file needs to change.
+
+
+===========================================================
+HOW TO ADD A NEW SOCIAL PLATFORM
+===========================================================
+(Unchanged from before - see platforms/x.py for a working example.)
+
+Required constants: DOMAIN, DISPLAY_NAME
+Required function:  generate_dorks(value, ptype, date_from, date_to)
+                     -> list[tuple[label, raw_dork]]
+
+Platform modules do NOT build URLs themselves - app.py combines a
+platform's raw dorks with whichever engine(s) the user picked, using
+that engine's own URL-building logic. This keeps platform dorks
+engine-agnostic (the same Facebook dork can be opened on Google,
+DuckDuckGo, or Yandex).
+
+
+===========================================================
+HOW app.py WIRES THIS TOGETHER
+===========================================================
+1. User enters value + parameter type + optional date range.
+2. User picks platform(s) (optional) and one or more ENGINES.
+3. For each selected engine module:
+     categorized = engine_module.generate_dorks(value, ptype, from, to)
+   -> already-formed (label, raw_dork, full_url) per category,
+      specific to that engine's own syntax.
+4. For each selected platform module:
+     platform_results = platform_module.generate_dorks(value, ptype, from, to)
+   -> raw (label, raw_dork) pairs, engine-agnostic. app.py then
+      builds a URL for each SELECTED engine by calling a generic
+      "wrap as plain web search" helper on that engine module
+      (every engine module's generate_dorks category dict includes
+      a plain web-search URL builder internally; platform dorks
+      reuse that same query-string construction path).
+5. Everything is rendered in tabs (one tab per category) with
+   expanders per dork, and offered as a downloadable .txt containing
+   ONLY the raw dork strings (no labels, no headers, no URLs) -
+   one dork per line, deduplicated, across every selected engine
+   and platform.

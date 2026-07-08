@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; color: #222; background: #fafafa; line-height: 1.5; }
+      h2 { margin-top: 0; }
+      h3 { margin-top: 28px; border-bottom: 2px solid #008373; padding-bottom: 4px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; font-size: 0.9rem; }
+      th { background: #008373; color: #fff; }
+      code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; }
+      .example { background: #fff; border-left: 4px solid #008373; padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
+      .tag { display: inline-block; background: #e0f2ef; color: #00594f; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-right: 6px; }
+      .usecase { background: #eef7ee; border-left: 4px solid #2e7d32; padding: 8px 12px; margin: 6px 0; font-size: 0.88rem; border-radius: 4px; }
+      .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 8px 12px; margin: 12px 0; font-size: 0.88rem; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h2>🔷 Bing</h2>
+    <p>Bing supports a solid Google-like operator subset, plus one genuinely unique operator
+    worth knowing: <code>contains:</code>.</p>
+
+    <div class="note">
+      <b>Not supported on Bing:</b> <code>allintext:</code>, <code>allinurl:</code>,
+      <code>allintitle:</code>, <code>inanchor:</code>, <code>related:</code>, <code>cache:</code>,
+      and there's no public date-range text operator.
+    </div>
+
+    <h3>Filters</h3>
+    <table>
+      <tr><th>Filter</th><th>What it does</th></tr>
+      <tr><td><code>intitle:</code></td><td>Finds pages with the keyword in the page title</td></tr>
+      <tr><td><code>inurl:</code></td><td>Searches for URLs containing the specified keyword</td></tr>
+      <tr><td><code>site:</code></td><td>Restricts results to a specific website or domain</td></tr>
+      <tr><td><code>filetype:</code></td><td>Limits results to a specific file type</td></tr>
+      <tr><td><code>link:</code></td><td>Finds pages that link to a specific URL</td></tr>
+      <tr><td><code>contains:</code></td><td>Finds pages that LINK TO a file of the given type (e.g. <code>contains:pdf</code>) - different from <code>filetype:</code>, which finds pages that ARE that file type</td></tr>
+    </table>
+
+    <h3>Operators</h3>
+    <table>
+      <tr><th>Operator</th><th>What it does</th></tr>
+      <tr><td><code>"phrase"</code></td><td>Exact phrase match</td></tr>
+      <tr><td><code>OR</code></td><td>Matches either term</td></tr>
+      <tr><td><code>-</code></td><td>Excludes a term</td></tr>
+      <tr><td><code>()</code></td><td>Groups operators for combined logic</td></tr>
+    </table>
+
+    <h3>Sample Dorks</h3>
+    <div class="example">
+      <span class="tag">Pages linking to PDFs</span><br>
+      <code>site:example.com contains:pdf</code>
+      <p>Finds pages on a domain that link out to PDF files - useful for locating document indexes/repositories.</p>
+    </div>
+    <div class="example">
+      <span class="tag">Exposed backups</span><br>
+      <code>site:example.com inurl:backup OR inurl:.env</code>
+      <p>Finds indexed backup/config files on a target domain.</p>
+    </div>
+    <div class="example">
+      <span class="tag">Name + document type</span><br>
+      <code>intitle:"John Doe" filetype:docx</code>
+      <p>Finds Word documents with a name in the title.</p>
+    </div>
+
+    <h3>When to use Bing dorking</h3>
+    <div class="usecase"><b>Cross-verification</b> — Bing indexes some pages Google misses or de-prioritizes, useful as a second opinion during recon.</div>
+    <div class="usecase"><b>Finding document repositories</b> — <code>contains:</code> is genuinely useful for locating pages that aggregate links to a filetype, which Google has no direct equivalent for.</div>
+    <div class="usecase"><b>Corporate/government sites</b> — Bing has historically indexed more of the .gov/.mil and enterprise SharePoint space well.</div>
+
+    <p style="margin-top:24px;color:#888;">— Add more examples here as you build out this reference file.</p>
+  </body>
+</html>

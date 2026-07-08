@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body {
+        font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+        padding: 24px;
+        color: #222;
+        background: #fafafa;
+        line-height: 1.5;
+      }
+      h2 { margin-top: 0; }
+      h3 { margin-top: 28px; border-bottom: 2px solid #DE5833; padding-bottom: 4px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; font-size: 0.92rem; }
+      th { background: #DE5833; color: #fff; }
+      code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; }
+      .example { background: #fff; border-left: 4px solid #DE5833; padding: 10px 14px; margin: 8px 0; border-radius: 4px; }
+      .tag { display: inline-block; background: #fdece6; color: #b8391c; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-right: 6px; }
+      .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 8px 12px; margin: 12px 0; font-size: 0.88rem; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h2>🦆 DuckDuckGo</h2>
+    <p>DuckDuckGo shares a Google-like operator subset but is noticeably smaller -
+    several advanced Google operators simply aren't honored here.</p>
+
+    <div class="note">
+      <b>Not supported on DuckDuckGo:</b> <code>allintext:</code>, <code>allinurl:</code>,
+      <code>allintitle:</code>, <code>inanchor:</code>, <code>allinpostauthor:</code>,
+      <code>related:</code>, <code>cache:</code>, <code>numrange:</code>, and
+      <code>after:</code>/<code>before:</code> date filtering. Don't rely on these here even
+      though they work on Google.
+    </div>
+
+    <h3>Filters</h3>
+    <table>
+      <tr><th>Filter</th><th>What it does</th></tr>
+      <tr><td><code>intext:</code></td><td>Finds pages containing the keyword anywhere in the page text</td></tr>
+      <tr><td><code>intitle:</code></td><td>Finds pages with the keyword in the page title</td></tr>
+      <tr><td><code>inurl:</code></td><td>Searches for URLs containing the specified keyword</td></tr>
+      <tr><td><code>site:</code></td><td>Restricts results to a specific website or domain</td></tr>
+      <tr><td><code>filetype:</code></td><td>Limits results to a specific file type (pdf, docx, xls, etc.)</td></tr>
+    </table>
+
+    <h3>Operators</h3>
+    <table>
+      <tr><th>Operator</th><th>What it does</th></tr>
+      <tr><td><code>"phrase"</code></td><td>Searches for the exact phrase as written</td></tr>
+      <tr><td><code>OR</code></td><td>Returns results matching either term</td></tr>
+      <tr><td><code>-</code></td><td>Excludes results containing the specified term or site</td></tr>
+      <tr><td><code>+</code></td><td>Forces inclusion of a term</td></tr>
+      <tr><td><code>*</code></td><td>Wildcard for unknown words or patterns</td></tr>
+      <tr><td><code>()</code></td><td>Groups operators to control query logic</td></tr>
+    </table>
+
+    <h3>Sample Dorks</h3>
+
+    <div class="example">
+      <span class="tag">Exposed docs</span><br>
+      <code>site:example.com filetype:pdf "confidential"</code>
+      <p>Finds PDF files on a specific domain containing the word "confidential".</p>
+    </div>
+
+    <div class="example">
+      <span class="tag">Login pages</span><br>
+      <code>site:example.com inurl:login OR inurl:admin</code>
+      <p>Finds indexed login or admin panel pages on a target domain.</p>
+    </div>
+
+    <div class="example">
+      <span class="tag">Title + phrase combo</span><br>
+      <code>intitle:"John Doe" "resume"</code>
+      <p>Finds pages with a name in the title alongside the word "resume" in the body.</p>
+    </div>
+
+    <p style="margin-top:24px;color:#888;">— Add more examples here as you build out this reference file.</p>
+  </body>
+</html>

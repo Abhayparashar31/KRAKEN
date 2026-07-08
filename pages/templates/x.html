@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Manual: X (Twitter) Search Operators for OSINT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ece5d4;
+    --paper-dark: #e1d7bd;
+    --card: #f6f1e4;
+    --ink: #211d17;
+    --ink-soft: #4a4438;
+    --manila: #c9a86a;
+    --manila-dark: #a9853f;
+    --stamp-red: #9c3b2e;
+    --teal: #2f5a54;
+    --rule: rgba(33,29,23,0.22);
+    --shadow: rgba(33,29,23,0.18);
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top left, rgba(255,255,255,0.25), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    line-height:1.6;
+  }
+
+  ::selection{ background: var(--manila); color: var(--ink); }
+
+  .grain{
+    position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ===== HEADER / DOSSIER COVER ===== */
+  header.cover{
+    position:relative;
+    margin: 0 auto;
+    padding: 56px 40px 44px;
+    max-width: 900px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    box-shadow: 0 18px 40px -20px var(--shadow);
+  }
+  .tab{
+    position:absolute; top:-22px; left:40px;
+    background: var(--manila);
+    border: 2px solid var(--ink);
+    border-bottom: none;
+    padding: 6px 18px 20px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 4px 4px 0 0;
+  }
+  .case-no{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    display:flex; justify-content: space-between;
+    margin-bottom: 28px;
+    border-bottom: 1px dashed var(--rule);
+    padding-bottom: 14px;
+  }
+  h1.title{
+    font-family:'Special Elite', monospace;
+    font-size: clamp(32px, 5vw, 52px);
+    margin: 0 0 6px;
+    letter-spacing: 0.01em;
+    line-height:1.1;
+  }
+  .subtitle{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--ink-soft);
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    margin: 0 0 26px;
+  }
+  .stamp{
+    position:absolute;
+    right: 36px;
+    bottom: 30px;
+    border: 3px solid var(--stamp-red);
+    color: var(--stamp-red);
+    font-family: 'Special Elite', monospace;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    transform: rotate(-8deg);
+    border-radius: 6px;
+    opacity: 0.85;
+    background: rgba(156,59,46,0.04);
+  }
+  .cover-lede{ max-width: 60ch; font-size: 17px; color: var(--ink); }
+  .cover-lede strong{ background: linear-gradient(transparent 60%, var(--manila) 60%); }
+
+  /* ===== SECTION LABELS ===== */
+  .section{ margin-top: 64px; }
+  .section-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--manila-dark);
+    display:flex; align-items:center; gap: 12px;
+    margin-bottom: 10px;
+  }
+  .section-eyebrow::after{
+    content:''; flex:1; height:1px; background: var(--rule);
+  }
+  h2.section-title{
+    font-family:'Special Elite', monospace;
+    font-size: 26px;
+    margin: 0 0 18px;
+  }
+  p.lead{ color: var(--ink-soft); font-size: 16px; max-width: 68ch; }
+
+  /* ===== OPERATOR TABLE ===== */
+  .op-table{
+    width:100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+  }
+  .op-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform:uppercase;
+    letter-spacing: 0.08em;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 14px;
+    text-align:left;
+  }
+  .op-table td{
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14.5px;
+    vertical-align: top;
+  }
+  .op-table tr:last-child td{ border-bottom:none; }
+  .op-table tr:nth-child(even) td{ background: rgba(201,168,106,0.10); }
+  code.tag{
+    font-family:'IBM Plex Mono', monospace;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* ===== INDEX CARDS ===== */
+  .card-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap: 18px;
+    margin-top: 22px;
+  }
+  .dork-card{
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    padding: 18px 18px 16px;
+    position: relative;
+    box-shadow: 4px 4px 0 var(--rule);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .dork-card:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--manila-dark); }
+  .dork-card .cat{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+    display:block;
+  }
+  .dork-card h3{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size: 16.5px;
+    margin: 0 0 10px;
+  }
+  .query{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.8px;
+    background: var(--ink);
+    color: #dcd3bb;
+    padding: 10px 12px;
+    border-radius: 3px;
+    overflow-x: auto;
+    margin-bottom: 10px;
+    white-space: pre;
+  }
+  .dork-card p{ font-size: 13.5px; color: var(--ink-soft); margin: 0; }
+
+  /* ===== TIPS LIST ===== */
+  .tips{ margin-top: 20px; display:flex; flex-direction:column; gap: 14px; }
+  .tip{
+    display:grid;
+    grid-template-columns: 46px 1fr;
+    gap: 16px;
+    align-items:start;
+    padding: 14px 16px;
+    background: var(--card);
+    border-left: 4px solid var(--manila-dark);
+  }
+  .tip .num{
+    font-family:'Special Elite', monospace;
+    font-size: 22px;
+    color: var(--manila-dark);
+    text-align:center;
+  }
+  .tip h4{ margin: 0 0 4px; font-size: 15.5px; }
+  .tip p{ margin:0; color: var(--ink-soft); font-size: 14px; }
+
+  /* ===== ETHICS / REDACTED BOX ===== */
+  .redacted-box{
+    margin-top: 26px;
+    border: 2px dashed var(--stamp-red);
+    padding: 22px 24px;
+    background: rgba(156,59,46,0.05);
+    position: relative;
+  }
+  .redacted-box .flag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color: var(--stamp-red);
+    font-weight:700;
+    margin-bottom: 10px;
+    display:block;
+  }
+  .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
+  .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
+  .redacted-box strong{ color: var(--ink); }
+
+  footer{
+    margin-top: 70px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 600px){
+    header.cover{ padding: 48px 20px 32px; }
+    .stamp{ position:static; display:inline-block; margin-top: 18px; transform: rotate(-4deg); }
+    .case-no{ flex-direction:column; gap:4px; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="tab">Research Notes</div>
+    <div class="case-no">
+      <span>CLASSIFICATION: PUBLIC / EDUCATIONAL</span>
+    </div>
+    <h1 class="title">X (Twitter) Search Ops</h1>
+    <p class="subtitle">A field guide to advanced search-operator reconnaissance on X (OSINT)</p>
+    <p class="cover-lede">X's advanced search syntax lets you filter its public post history far more precisely than the default search box — by account, date, engagement, media type, and location. Used well, it's a core <strong>OSINT and investigative research</strong> tool: journalists verifying timelines, researchers tracking public discourse, and analysts monitoring brand or security mentions all lean on it daily.</p>
+    <div class="stamp">Authorized use only</div>
+  </header>
+
+  <!-- OPERATORS -->
+  <section class="section">
+    <div class="section-eyebrow">01 / Core Operators</div>
+    <h2 class="section-title">The syntax you'll actually use</h2>
+    <p class="lead">These work in the X search bar and at x.com/search. Combine several in one query — that's where precision comes from. Most also work through X's advanced search UI if you'd rather build them visually.</p>
+
+    <table class="op-table">
+      <tr><th>Operator</th><th>What it does</th><th>Example</th></tr>
+      <tr><td><code class="tag">from:</code></td><td>Posts sent by a specific account</td><td><code class="tag">from:nasa</code></td></tr>
+      <tr><td><code class="tag">to:</code></td><td>Replies directed at a specific account</td><td><code class="tag">to:nasa</code></td></tr>
+      <tr><td><code class="tag">since: / until:</code></td><td>Restricts results to a date range (YYYY-MM-DD)</td><td><code class="tag">since:2024-01-01 until:2024-02-01</code></td></tr>
+      <tr><td><code class="tag">"exact phrase"</code></td><td>Forces an exact, unbroken match</td><td><code class="tag">"server outage"</code></td></tr>
+      <tr><td><code class="tag">-word</code></td><td>Excludes a term from results</td><td><code class="tag">outage -scheduled</code></td></tr>
+      <tr><td><code class="tag">filter:media</code></td><td>Only posts containing photos or video</td><td><code class="tag">filter:media from:example</code></td></tr>
+      <tr><td><code class="tag">filter:links</code></td><td>Only posts that include a URL</td><td><code class="tag">filter:links "data breach"</code></td></tr>
+      <tr><td><code class="tag">filter:replies</code></td><td>Only reply posts (drop for top-level only)</td><td><code class="tag">-filter:replies from:example</code></td></tr>
+      <tr><td><code class="tag">min_retweets:</code></td><td>Minimum repost count threshold</td><td><code class="tag">"layoffs" min_retweets:500</code></td></tr>
+      <tr><td><code class="tag">min_faves:</code></td><td>Minimum like count threshold</td><td><code class="tag">"layoffs" min_faves:200</code></td></tr>
+      <tr><td><code class="tag">near: / within:</code></td><td>Geotagged posts near a place, radius in km/mi</td><td><code class="tag">near:"Jodhpur" within:15km</code></td></tr>
+      <tr><td><code class="tag">list:</code></td><td>Search within a specific public list</td><td><code class="tag">list:1234567 "advisory"</code></td></tr>
+    </table>
+  </section>
+
+  <!-- EXAMPLES -->
+  <section class="section">
+    <div class="section-eyebrow">02 / Illustrative Patterns</div>
+    <h2 class="section-title">Common investigative queries</h2>
+    <p class="lead">Categories most OSINT and digital-verification guides reference — shown at the pattern level so you understand the intent behind each, not as a script to run against private individuals.</p>
+
+    <div class="card-grid">
+      <div class="dork-card">
+        <span class="cat">Timeline verification</span>
+        <h3>Pinning down when something was first posted</h3>
+        <span class="query">"incident name" since:2024-06-01 until:2024-06-03 filter:media</span>
+        <p>Narrows a fast-moving story to a tight window with visual evidence, useful for confirming what was known and when.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Brand / security monitoring</span>
+        <h3>Catching mentions before they trend</h3>
+        <span class="query">"yourcompany" ("down" OR "outage" OR "hacked") -filter:replies</span>
+        <p>Flags early chatter about an outage or breach so a comms or security team can respond before it snowballs.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Account activity audit</span>
+        <h3>Reviewing an org's own public posture</h3>
+        <span class="query">from:yourcompany filter:links min_faves:50</span>
+        <p>A quick way for a team to review their own most-engaged posts that shared external links, for a content or security review.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Geolocated reporting</span>
+        <h3>Finding on-the-ground posts near an event</h3>
+        <span class="query">"protest" near:"City Name" within:10km filter:media</span>
+        <p>Surfaces geotagged eyewitness media for verification workflows — cross-check against other sources before treating it as confirmed.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Public discourse trends</span>
+        <h3>Gauging reaction volume over time</h3>
+        <span class="query">"policy name" min_retweets:1000 since:2024-01-01</span>
+        <p>Filters to only the highest-engagement posts on a topic, useful for sampling the loudest public reactions rather than every mention.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Cross-referencing sources</span>
+        <h3>Finding who first shared a link</h3>
+        <span class="query">url:"example.com/report" -filter:replies</span>
+        <p>Helps trace the earliest accounts to share a specific URL, useful for source attribution and spotting coordinated amplification.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section class="section">
+    <div class="section-eyebrow">03 / Field Notes</div>
+    <h2 class="section-title">Tips for getting good results</h2>
+
+    <div class="tips">
+      <div class="tip">
+        <div class="num">01</div>
+        <div><h4>Stack operators instead of running separate searches</h4><p>Combining <code class="tag">from:</code> + <code class="tag">since:/until:</code> + a quoted phrase gets you a tight result set in one query.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">02</div>
+        <div><h4>Use the Advanced Search UI to build syntax</h4><p>x.com/search-advanced lets you set filters visually and copy the generated query string — a good way to learn the syntax by example.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">03</div>
+        <div><h4>Engagement thresholds cut through noise</h4><p><code class="tag">min_retweets:</code> and <code class="tag">min_faves:</code> are the fastest way to skip low-signal posts on a high-volume topic.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">04</div>
+        <div><h4>Archive what you find</h4><p>Posts and accounts can be deleted or made private. If a post is evidentiary, capture a timestamped screenshot or use a web archive tool at the time you find it.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">05</div>
+        <div><h4>Corroborate geotagged content</h4><p>Location and media filters surface candidates, not confirmed facts — verify against other independent sources before treating a post as ground truth.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">06</div>
+        <div><h4>Run the same queries against your own org</h4><p>The highest-value use for most teams is inward-facing: checking what's publicly discoverable about your own brand, employees, or leaked internal terms.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETHICS -->
+  <section class="section">
+    <div class="section-eyebrow">04 / Scope & Ethics</div>
+    <h2 class="section-title">Where the line is</h2>
+    <div class="redacted-box">
+      <span class="flag">Read before you search</span>
+      <p>These operators only surface content already public on X — they aren't a way around privacy settings, and finding something doesn't make every use of it appropriate:</p>
+      <ul>
+        <li><strong>Public posts, not private lives.</strong> A post being publicly searchable doesn't license using it to dox, harass, or build a profile on a private individual.</li>
+        <li><strong>Respect X's Terms and rate limits.</strong> Automated scraping of search results at scale falls outside normal use and can violate the platform's ToS.</li>
+        <li><strong>Verify before you amplify.</strong> Geotagged or timestamped posts can be misleading, mislabeled, or old — corroborate with independent sources before treating them as confirmed.</li>
+        <li><strong>Report, don't exploit.</strong> If a search surfaces someone else's exposed personal data or credentials, the responsible step is reporting it, not further digging.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>Field Manual — X (Twitter) Search Operators</span>
+    <span>For educational & authorized research use</span>
+  </footer>
+
+</div>
+</body>
+</html>

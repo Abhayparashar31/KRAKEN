@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Manual: Facebook Search Operators & Query Syntax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ece5d4;
+    --paper-dark: #e1d7bd;
+    --card: #f6f1e4;
+    --ink: #211d17;
+    --ink-soft: #4a4438;
+    --manila: #c9a86a;
+    --manila-dark: #a9853f;
+    --stamp-red: #9c3b2e;
+    --teal: #2f5a54;
+    --rule: rgba(33,29,23,0.22);
+    --shadow: rgba(33,29,23,0.18);
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background: radial-gradient(ellipse at top left, rgba(255,255,255,0.25), transparent 60%), var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    line-height:1.6;
+  }
+  ::selection{ background: var(--manila); color: var(--ink); }
+  .grain{
+    position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+
+  header.cover{
+    position:relative; margin: 0 auto; padding: 56px 40px 44px; max-width: 900px;
+    border: 2px solid var(--ink); background: var(--card);
+    box-shadow: 0 18px 40px -20px var(--shadow);
+  }
+  .tab{
+    position:absolute; top:-22px; left:40px; background: var(--manila);
+    border: 2px solid var(--ink); border-bottom: none; padding: 6px 18px 20px;
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; border-radius: 4px 4px 0 0;
+  }
+  .case-no{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em;
+    color: var(--ink-soft); display:flex; justify-content: space-between; margin-bottom: 28px;
+    border-bottom: 1px dashed var(--rule); padding-bottom: 14px;
+  }
+  h1.title{
+    font-family:'Special Elite', monospace; font-size: clamp(30px, 5vw, 48px);
+    margin: 0 0 6px; letter-spacing: 0.01em; line-height:1.1;
+  }
+  .subtitle{ font-family:'IBM Plex Mono', monospace; color: var(--ink-soft); font-size: 14px; letter-spacing: 0.03em; margin: 0 0 26px; }
+  .stamp{
+    position:absolute; right: 36px; bottom: 30px; border: 3px solid var(--stamp-red); color: var(--stamp-red);
+    font-family: 'Special Elite', monospace; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px 14px; transform: rotate(-8deg); border-radius: 6px; opacity: 0.85; background: rgba(156,59,46,0.04);
+  }
+  .cover-lede{ max-width: 62ch; font-size: 17px; color: var(--ink); }
+  .cover-lede strong{ background: linear-gradient(transparent 60%, var(--manila) 60%); }
+
+  .section{ margin-top: 64px; }
+  .section-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--manila-dark); display:flex; align-items:center; gap: 12px; margin-bottom: 10px;
+  }
+  .section-eyebrow::after{ content:''; flex:1; height:1px; background: var(--rule); }
+  h2.section-title{ font-family:'Special Elite', monospace; font-size: 26px; margin: 0 0 18px; }
+  p.lead{ color: var(--ink-soft); font-size: 16px; max-width: 68ch; }
+
+  .op-table{ width:100%; border-collapse: collapse; margin-top: 20px; background: var(--card); border: 2px solid var(--ink); }
+  .op-table th{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; text-transform:uppercase; letter-spacing: 0.08em;
+    background: var(--ink); color: var(--paper); padding: 10px 14px; text-align:left;
+  }
+  .op-table td{ padding: 12px 14px; border-bottom: 1px solid var(--rule); font-size: 14.5px; vertical-align: top; }
+  .op-table tr:last-child td{ border-bottom:none; }
+  .op-table tr:nth-child(even) td{ background: rgba(201,168,106,0.10); }
+  code.tag{
+    font-family:'IBM Plex Mono', monospace; background: var(--ink); color: var(--paper);
+    padding: 2px 7px; border-radius: 4px; font-size: 13px; white-space: nowrap;
+  }
+
+  .card-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 18px; margin-top: 22px; }
+  .dork-card{
+    background: var(--card); border: 1.5px solid var(--ink); border-radius: 2px; padding: 18px 18px 16px;
+    position: relative; box-shadow: 4px 4px 0 var(--rule); transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .dork-card:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--manila-dark); }
+  .dork-card .cat{
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 8px; display:block;
+  }
+  .dork-card h3{ font-family:'Source Serif 4', serif; font-weight:600; font-size: 16.5px; margin: 0 0 10px; }
+  .query{
+    display:block; font-family:'IBM Plex Mono', monospace; font-size: 12.6px; background: var(--ink);
+    color: #dcd3bb; padding: 10px 12px; border-radius: 3px; overflow-x: auto; margin-bottom: 10px; white-space: pre;
+  }
+  .dork-card p{ font-size: 13.5px; color: var(--ink-soft); margin: 0; }
+
+  .tips{ margin-top: 20px; display:flex; flex-direction:column; gap: 14px; }
+  .tip{ display:grid; grid-template-columns: 46px 1fr; gap: 16px; align-items:start; padding: 14px 16px; background: var(--card); border-left: 4px solid var(--manila-dark); }
+  .tip .num{ font-family:'Special Elite', monospace; font-size: 22px; color: var(--manila-dark); text-align:center; }
+  .tip h4{ margin: 0 0 4px; font-size: 15.5px; }
+  .tip p{ margin:0; color: var(--ink-soft); font-size: 14px; }
+
+  .redacted-box{ margin-top: 26px; border: 2px dashed var(--stamp-red); padding: 22px 24px; background: rgba(156,59,46,0.05); position: relative; }
+  .redacted-box .flag{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing:0.14em; text-transform:uppercase;
+    color: var(--stamp-red); font-weight:700; margin-bottom: 10px; display:block;
+  }
+  .redacted-box ul{ margin: 8px 0 0; padding-left: 20px; }
+  .redacted-box li{ margin-bottom: 8px; font-size: 14.5px; }
+  .redacted-box strong{ color: var(--ink); }
+
+  /* ===== SOURCES / REFERENCE LEDGER ===== */
+  .refs{
+    margin-top: 22px; display:flex; flex-direction:column; gap: 12px;
+  }
+  .ref{
+    display:grid; grid-template-columns: 92px 1fr; gap: 16px; align-items:start;
+    padding: 14px 16px; background: var(--card); border: 1.5px solid var(--ink);
+  }
+  .ref .kind{
+    font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:0.08em; text-transform:uppercase;
+    color: var(--paper); background: var(--teal); padding: 4px 8px; border-radius: 3px; text-align:center; height: fit-content;
+  }
+  .ref a{ color: var(--ink); font-weight:600; text-decoration: none; border-bottom: 1.5px solid var(--manila-dark); }
+  .ref a:hover{ color: var(--teal); }
+  .ref p{ margin: 6px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+
+  footer{
+    margin-top: 70px; padding-top: 20px; border-top: 1px solid var(--rule);
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--ink-soft);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap: 10px;
+  }
+
+  @media (max-width: 600px){
+    header.cover{ padding: 48px 20px 32px; }
+    .stamp{ position:static; display:inline-block; margin-top: 18px; transform: rotate(-4deg); }
+    .case-no{ flex-direction:column; gap:4px; }
+    .ref{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="tab">Research Notes</div>
+    <div class="case-no">
+      <span>CLASSIFICATION: PUBLIC / EDUCATIONAL</span>
+    </div>
+    <h1 class="title">Facebook Search Ops</h1>
+    <p class="subtitle">Query syntax for Meta Content Library and the Graph API</p>
+    <p class="cover-lede">Unlike Google or X, Facebook doesn't expose a public "advanced search" bar with <code class="tag">site:</code>-style operators. Instead, precise querying happens through two official Meta surfaces: the <strong>Meta Content Library & API</strong> (Boolean search over public posts, for qualified researchers) and the <strong>Graph API</strong> (structured field/edge queries, for app developers with the right permissions). This guide covers the real, documented syntax for both.</p>
+    <div class="stamp">Authorized use only</div>
+  </header>
+
+  <!-- OPERATORS -->
+  <section class="section">
+    <div class="section-eyebrow">01 / Core Operators & Syntax</div>
+    <h2 class="section-title">The two query systems</h2>
+    <p class="lead">Meta Content Library uses Boolean search operators. The Graph API uses URL parameters and field-expansion syntax instead of search operators — you're querying specific objects and edges, not free text. Both are shown below.</p>
+
+    <table class="op-table">
+      <tr><th>System</th><th>Operator</th><th>What it does</th><th>Example</th></tr>
+      <tr><td rowspan="6" style="font-family:'IBM Plex Mono',monospace;font-size:12px;">Content Library<br>(Boolean search)</td>
+          <td><code class="tag">&amp; / space</code></td><td>AND — all terms must appear</td><td><code class="tag">cat&dog&allergy</code></td></tr>
+      <tr><td><code class="tag">|</code></td><td>OR — either term may appear</td><td><code class="tag">cat | dog</code></td></tr>
+      <tr><td><code class="tag">-</code></td><td>NOT — excludes a term</td><td><code class="tag">dog -puppy</code></td></tr>
+      <tr><td><code class="tag">( )</code></td><td>Grouping — controls parse order</td><td><code class="tag">(fuyu | persimmon) -astringent</code></td></tr>
+      <tr><td><code class="tag">q=</code></td><td>Query parameter passed to the search endpoint</td><td><code class="tag">params: q="dogs | cats & pets"</code></td></tr>
+      <tr><td>—</td><td>Single keywords only — no phrases, no wildcards</td><td>n/a</td></tr>
+      <tr><td rowspan="5" style="font-family:'IBM Plex Mono',monospace;font-size:12px;">Graph API<br>(structured query)</td>
+          <td><code class="tag">fields=</code></td><td>Selects which fields/edges to return</td><td><code class="tag">?fields=id,name,posts</code></td></tr>
+      <tr><td><code class="tag">{ }</code></td><td>Field expansion — nests connected edges in one call</td><td><code class="tag">posts.limit(10){message,comments}</code></td></tr>
+      <tr><td><code class="tag">.limit() .summary()</code></td><td>Modifiers that cap results or return aggregate counts</td><td><code class="tag">comments.summary(true).limit(5)</code></td></tr>
+      <tr><td><code class="tag">since= / until=</code></td><td>Time-range filter (Unix timestamp or date string)</td><td><code class="tag">/me/posts?since=2024-01-01&until=2024-01-31</code></td></tr>
+      <tr><td><code class="tag">metric=</code></td><td>Requests specific Insights metrics for a Page/Post/Ad</td><td><code class="tag">/insights?metric=page_impressions</code></td></tr>
+    </table>
+  </section>
+
+  <!-- EXAMPLES -->
+  <section class="section">
+    <div class="section-eyebrow">02 / Sample Queries</div>
+    <h2 class="section-title">Worked examples for both systems</h2>
+    <p class="lead">Content Library queries run against the <code class="tag">search/facebook_posts</code> endpoint; Graph API examples run against <code class="tag">graph.facebook.com</code> with a valid access token and the required permissions.</p>
+
+    <div class="card-grid">
+      <div class="dork-card">
+        <span class="cat">Content Library · Boolean AND</span>
+        <h3>All terms must be present</h3>
+        <span class="query">q = "election & misinformation & 2024"</span>
+        <p>Matches posts containing all three terms — the default building block for narrowing a research query.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Content Library · Boolean OR</span>
+        <h3>Either term may appear</h3>
+        <span class="query">q = "flood | wildfire"</span>
+        <p>Casts a wider net across two related disaster-related keywords in a single search.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Content Library · NOT + grouping</span>
+        <h3>Excluding a term, precedence controlled</h3>
+        <span class="query">q = "(vaccine | booster) - satire"</span>
+        <p>Finds posts about vaccines or boosters while excluding anything also tagged satire — parentheses force the OR to resolve before the NOT is applied.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Graph API · field expansion</span>
+        <h3>Page posts with nested engagement data</h3>
+        <span class="query">GET /{page-id}?fields=name,posts.limit(10){message,created_time,comments.summary(true),reactions.summary(true)}</span>
+        <p>Pulls a page's recent posts along with comment and reaction totals in one round trip instead of N+1 separate calls.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Graph API · time-range filter</span>
+        <h3>Posts within a specific window</h3>
+        <span class="query">GET /{page-id}/posts?since=2024-01-01&until=2024-01-31&limit=100</span>
+        <p>Restricts results to a date range — the standard pattern for incremental or historical pulls.</p>
+      </div>
+
+      <div class="dork-card">
+        <span class="cat">Graph API · Insights metrics</span>
+        <h3>Aggregated Page performance</h3>
+        <span class="query">GET /{page-id}/insights?metric=page_impressions,page_engaged_users&period=day&since=2024-01-01&until=2024-01-31</span>
+        <p>Returns pre-aggregated daily metrics rather than raw post data — far cheaper than computing engagement client-side.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section class="section">
+    <div class="section-eyebrow">03 / Pro Tips</div>
+    <h2 class="section-title">Getting precise, efficient results</h2>
+
+    <div class="tips">
+      <div class="tip">
+        <div class="num">01</div>
+        <div><h4>Remember parse order in Boolean queries</h4><p>Content Library always evaluates NOT first, then AND, then OR — left to right for equal precedence. Use parentheses whenever the default order isn't what you mean.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">02</div>
+        <div><h4>Only single keywords, no phrases or wildcards</h4><p>Content Library search doesn't support quoted phrases or <code class="tag">*</code> wildcards — build intent through combinations of single terms and operators instead.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">03</div>
+        <div><h4>Use field expansion instead of chained calls</h4><p>Nesting edges with <code class="tag">{ }</code> in one Graph API request avoids the N+1 problem and counts as a single call against your rate limit.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">04</div>
+        <div><h4>Prefer <code class="tag">summary(true)</code> over fetching every record</h4><p>When you only need a count (comments, reactions), the summary modifier returns aggregates without pulling every individual object.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">05</div>
+        <div><h4>Always paginate with the provided cursor</h4><p>Use the <code class="tag">paging.next</code> URL Facebook returns rather than manually incrementing offsets — manual pagination breaks silently as data changes.</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">06</div>
+        <div><h4>Batch related Graph API calls</h4><p>Up to 50 operations can be bundled into one batch request, and later operations can reference earlier results via JSONPath — useful for dependent lookups like "user → their posts."</p></div>
+      </div>
+      <div class="tip">
+        <div class="num">07</div>
+        <div><h4>Request only the fields you need</h4><p>The Graph API returns nothing by default until fields are named — build reusable field templates for your common query shapes rather than over-fetching.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDANCE -->
+  <section class="section">
+    <div class="section-eyebrow">04 / Guidance & Access</div>
+    <h2 class="section-title">Where the line is</h2>
+    <div class="redacted-box">
+      <span class="flag">Read before you query</span>
+      <ul>
+        <li><strong>Content Library access is gated.</strong> It's built for qualified academic and public-interest researchers, not general public search — Meta requires an application and approval before you get API or tool access.</li>
+        <li><strong>Graph API access needs real permissions.</strong> Reading anything beyond public Page data requires an access token scoped to that data, and user-level data requires the person's consent through app review — you can't query private profiles or friend lists at will.</li>
+        <li><strong>Never expose access tokens client-side.</strong> Route Graph API calls through a server-side proxy and rotate tokens; a leaked token is equivalent to leaked credentials.</li>
+        <li><strong>Respect platform terms and data-use limits.</strong> Both systems come with usage restrictions (rate limits, retention rules, redistribution limits) — read the disclosures for the system you're using before building on top of it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="section">
+    <div class="section-eyebrow">05 / Sources & Further Intel</div>
+    <h2 class="section-title">Go straight to the documentation</h2>
+    <div class="refs">
+      <div class="ref">
+        <span class="kind">Official Docs</span>
+        <div>
+          <a href="https://developers.facebook.com/docs/content-library-and-api/content-library-api/guides/advanced-search/" target="_blank" rel="noopener">Meta Content Library API — Advanced Search Guidelines</a>
+          <p>The authoritative reference for Boolean query syntax (AND/OR/NOT, grouping, right-to-left language handling).</p>
+        </div>
+      </div>
+      <div class="ref">
+        <span class="kind">Official Docs</span>
+        <div>
+          <a href="https://developers.facebook.com/docs/content-library-and-api/get-access" target="_blank" rel="noopener">Meta Content Library and API — Get Access</a>
+          <p>Eligibility and application process for researchers who want Content Library or API access.</p>
+        </div>
+      </div>
+      <div class="ref">
+        <span class="kind">Official Docs</span>
+        <div>
+          <a href="https://developers.facebook.com/docs/graph-api" target="_blank" rel="noopener">Graph API Reference — Meta for Developers</a>
+          <p>Full reference for nodes, edges, fields, and permissions across the Graph API.</p>
+        </div>
+      </div>
+      <div class="ref">
+        <span class="kind">Official Docs</span>
+        <div>
+          <a href="https://developers.facebook.com/docs/graph-api/reference/insights" target="_blank" rel="noopener">Graph API — Insights Reference</a>
+          <p>Complete list of available Page, Post, and Ad metrics for the Insights endpoint.</p>
+        </div>
+      </div>
+      <div class="ref">
+        <span class="kind">Tool</span>
+        <div>
+          <a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener">Graph API Explorer</a>
+          <p>Meta's official sandbox for testing Graph API queries and inspecting response structures before writing code.</p>
+        </div>
+      </div>
+      <div class="ref">
+        <span class="kind">Tutorial</span>
+        <div>
+          <a href="https://reintech.io/blog/advanced-querying-facebook-graph-api" target="_blank" rel="noopener">Reintech — Advanced Techniques for Querying the Graph API</a>
+          <p>Community write-up covering batch requests, field expansion patterns, pagination, and error-handling code samples.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Field Manual — Facebook Search Operators</span>
+    <span>For educational & authorized research use</span>
+  </footer>
+
+</div>
+</body>
+</html>
