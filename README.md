@@ -181,15 +181,7 @@ You are responsible for:
 - Complying with applicable laws in your jurisdiction regarding OSINT and data collection
 
 ---
-
-## 🛣️ Roadmap
-
-- [ ] Facebook dork module (people / photos / pages / places / posts / events)
-- [ ] Instagram dork module (people / photos / pages / places / posts / tags / reels)
-- [ ] Additional search engines (Brave, Ecosia, etc.)
-- [ ] Subreddit-name and List-ID input fields (currently placeholder-based)
-- [ ] Packaging as an installable CLI tool / Kali package
-
+See [Future Work.txt](./Future_Work.txt) for planned updates and future work. 
 ---
 
 ## 📄 License
