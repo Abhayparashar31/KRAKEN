@@ -181,7 +181,7 @@ You are responsible for:
 - Complying with applicable laws in your jurisdiction regarding OSINT and data collection
 
 ---
-See [Future Work.txt](./Future_Work.txt) for planned updates and future work. 
+<p> See <a href="https://github.com/Abhayparashar31/KRAKEN/blob/main/Future_Work.txt">Future_Work.txt</a> for planned updates and future work. </p>
 ---
 
 ## 📄 License
