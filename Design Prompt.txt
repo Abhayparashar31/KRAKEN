@@ -1,0 +1,49 @@
+Generate a single self-contained HTML file for a "manual reference" card page.
+
+TOPIC: {TOPIC_NAME} (e.g. "Google", "Bing", "Reddit")
+BRAND COLOR: {HEX_COLOR} (e.g. #4285F4 for Google, #FF4500 for Reddit)
+ICON/EMOJI: {EMOJI} (e.g. 🔍, 👽, 🔷)
+
+STRUCTURE (in this order):
+1. <h2> title: "{EMOJI} {TOPIC_NAME} — Manual Dork Reference"
+2. One short intro paragraph explaining what this reference covers
+3. (Optional) A ".note" callout box listing anything NOT supported/reliable
+   for this topic, so readers don't assume feature parity with other tools
+4. <h3> "Filters" section: a table with two columns (Filter | What it does),
+   listing every real, documented operator/filter for this topic
+5. <h3> "Operators" section: a table with two columns (Operator | What it
+   does) covering general syntax (phrase matching, AND/OR, exclusion,
+   grouping, wildcards, etc.)
+6. <h3> "Sample Dorks" section: 3 ".example" cards, each with:
+   - a small ".tag" label describing the use case
+   - the raw dork in a <code> block
+   - one sentence explaining what it finds
+7. <h3> "When to use {TOPIC_NAME} dorking" section: 3-4 ".usecase" boxes,
+   each bolding a short use-case title followed by a one-sentence
+   explanation of a real, practical scenario where this specific tool is
+   the right choice over alternatives
+8. A closing muted-gray placeholder line inviting further additions
+
+DESIGN SYSTEM (apply exactly, adjusting only {HEX_COLOR}):
+- Font: -apple-system, "Segoe UI", Roboto, sans-serif
+- Body: padding 24px, color #222, background #fafafa, line-height 1.5
+- h2: no top margin
+- h3: margin-top 28px, bottom border 2px solid {HEX_COLOR}, padding-bottom 4px
+- Tables: full width, border-collapse, row padding 8px 10px, bottom border
+  1px solid #ddd, font-size 0.9rem
+- Table header (<th>): background {HEX_COLOR}, white text
+- <code>: background #eee, padding 2px 6px, border-radius 4px
+- .example: white background, left border 4px solid {HEX_COLOR}, padding
+  10px 14px, margin 8px 0, border-radius 4px
+- .tag: inline-block, light-tint background of {HEX_COLOR} (~15% opacity
+  equivalent), dark-tint text of {HEX_COLOR}, padding 2px 8px,
+  border-radius 10px pill shape, font-size 0.75rem
+- .usecase: light green background #eef7ee, left border 4px solid #2e7d32
+  (fixed green regardless of brand color — keeps use-cases visually
+  distinct from examples), padding 8px 12px, margin 6px 0, font-size 0.88rem
+- .note: light yellow background #fff8e1, left border 4px solid #f5c518
+  (fixed amber regardless of brand color), same padding/sizing as .usecase
+
+OUTPUT FORMAT:
+Return ONLY the raw HTML (starting with <html>, ending with </html>),
+no markdown code fences, no explanation before or after.

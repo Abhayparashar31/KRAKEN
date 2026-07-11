@@ -119,7 +119,6 @@ def generate_dorks(value, ptype, date_from=None, date_to=None):
         sections["Advanced-Dorks"] = advanced
     
     if is_username:
-        print("Selected Category is a Username")
         advanced = [
         ("Blog posts by author", _j(f"allinpostauthor:{term}", dr)),
         ("Username Cross Search",_j(f"{term}”*com",dr)),
