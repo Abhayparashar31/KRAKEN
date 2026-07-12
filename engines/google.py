@@ -120,6 +120,7 @@ def generate_dorks(value, ptype, date_from=None, date_to=None):
     
     if is_username:
         advanced = [
+        ("Accidental Leaked Private Keys", _j(f'"BEGIN RSA PRIVATE KEY" filetype:key site:github.com/{term}"',dr)),    
         ("Blog posts by author", _j(f"allinpostauthor:{term}", dr)),
         ("Username Cross Search",_j(f"{term}”*com",dr)),
         ("Developer Profiles", _j(f'site:://github.com{term} | site:://gitlab.com{term} | site:bitbucket.org/{term}', dr)),

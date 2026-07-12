@@ -124,6 +124,7 @@ def generate_dorks(value, ptype, date_from=None, date_to=None, extra_keywords=No
     if username:
         repo_dorks.append((f"Repositories owned by @{username}", f'user:{username}',
                            _search_url(f"user:{username}", "repositories")))
+
     if date_range:
         repo_dorks.append((f"Repositories created in range", f'q="{value}" created:{date_range}',
                            _search_url(_j(quoted, f"created:{date_range}"), "repositories")))

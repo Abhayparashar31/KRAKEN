@@ -44,7 +44,8 @@ LOGO_DOMAIN = {
     "Reddit": "reddit.com",
     "Facebook": "facebook.com",
     "Instagram": "instagram.com",
-    "LinkedIn": "linkedin.com"
+    "LinkedIn": "linkedin.com",
+    "GitHub":"github.com"
 }
 
 
@@ -214,7 +215,7 @@ elif st.session_state.step == 5:
     engine_choice = st.multiselect("Search engine(s) — select one or more:",
                                     list(engine_display_map.keys()),
                                     default=st.session_state.get("engine_choice_display",
-                                                                  list(engine_display_map.keys())))
+                                                                  ["Google"] if "Google" in engine_display_map else []))
     st.session_state.engine_choice_display = engine_choice
     selected_engines = [engine_display_map[e] for e in engine_choice]
 
